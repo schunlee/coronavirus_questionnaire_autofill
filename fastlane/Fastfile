@@ -1,0 +1,147 @@
+desc "Test Custom Actions"
+
+lane :change_server_notifications_url do |options|
+    server_url = options[:server_url]
+    update_app_store_server_notifications(server_url: server_url)
+end
+
+lane :switch_billing_grace_period do |options|
+    opt_in = options[:opt_in]
+    if opt_in
+        opt_in_flag = "true"
+    else
+        opt_in_flag = "false"
+    end
+    puts "************ 1 ***********"
+    puts opt_in_flag
+    puts "************ 2 ***********"
+    update_billing_grace_period(opt_in: opt_in_flag)
+end
+
+lane :update_pre_order do |options|
+    pre_order_flag = options[:pre_order_flag]
+    if pre_order_flag
+        pre_order_flag = "true"
+    else
+        pre_order_flag = "false"
+    end
+    puts pre_order_flag
+    pre_order_date = options[:pre_order_date]
+    set_pre_order(pre_order_flag: pre_order_flag, pre_order_date: pre_order_date)
+end
+
+# update_country_availability
+lane :set_country_availability do |options|
+    exclude_cn = options[:exclude_cn]
+    if exclude_cn
+        exclude_cn = "true"
+    else
+        exclude_cn = "false"
+    end
+    puts exclude_cn
+    update_country_availability(exclude_cn: exclude_cn)
+end
+
+lane :update_introductory_offers do |options|
+    product_id = options[:product_id]
+    us_tier_num = options[:us_tier_num]
+    duration_periods = options[:duration_periods]
+    offer_type = options[:offer_type]
+    set_introductory_offers(product_id: product_id, us_tier_num: us_tier_num, duration_periods: duration_periods, offer_type: offer_type)
+end
+
+lane :create_auto_renewable_subscription do |options|
+    group_name = options[:group_name]
+    reference_name = options[:reference_name]
+    product_id = options[:product_id]
+    review_pic_url = options[:review_pic_url]
+    merch_pic_url = options[:merch_pic_url]
+    review_notes = options[:review_notes]
+    duration = options[:duration]
+    price_tier = options[:price_tier]
+    cleared_flag = options[:cleared_flag]
+    group_version_dict = options[:group_version_dict]
+    iap_version_dict = options[:iap_version_dict]
+    
+    if cleared_flag
+        cleared_flag = "true"
+    else
+        cleared_flag = "false"
+    end
+    
+    auto_renewable_subscription(group_name: group_name, 
+                                reference_name: reference_name, 
+                                product_id: product_id, 
+                                duration: duration, 
+                                price_tier: price_tier, 
+                                cleared_flag: cleared_flag, 
+                                review_pic_url: review_pic_url, 
+                                merch_pic_url: merch_pic_url, 
+                                review_notes: review_notes, 
+                                group_version_dict: group_version_dict, 
+                                iap_version_dict: iap_version_dict)
+end
+
+lane :create_normal_subscription do |options|
+    product_id = options[:product_id]
+    reference_name = options[:reference_name]
+    review_notes = options[:review_notes]
+    review_pic_url = options[:review_pic_url]
+    merch_pic_url = options[:merch_pic_url]
+    cleared_flag = options[:cleared_flag]
+    price_tier = options[:price_tier]
+    iap_version_dict = option[:iap_version_dict]
+    subscription_type = option[:subscription_type]
+    
+    puts cleared_flag
+    if cleared_flag
+        cleared_flag = "true"
+    else
+        cleared_flag = "false"
+    end
+    
+    puts "88888888888 cleared_flag == > #{cleared_flag}"
+    
+    normal_subscription(product_id: product_id, reference_name: reference_name, review_notes: review_notes, review_pic_url: review_pic_url, merch_pic_url: merch_pic_url,
+                        cleared_flag: cleared_flag, iap_version_dict: iap_version_dict, price_tier: price_tier, subscription_type: subscription_type)
+end
+
+lane :delete_subscription do |options|
+    puts options
+    product_id = options[:product_id]
+    remove_subscription(product_id: product_id)
+end
+
+lane :modify_normal_subscription do |options|
+    puts options
+    product_id = options[:product_id]
+    reference_name = options[:reference_name] || nil
+    review_notes = options[:review_notes] || nil
+    iap_version_dict = options[:iap_version_dict] || {}
+    review_pic_url = options[:review_pic_url] || nil
+    merch_pic_url = options[:merch_pic_url] || nil
+    price_tier = options[:price_tier] || nil
+    
+    cleared_flag = nil
+    if options[:cleared_flag] == "true" or options[:cleared_flag] == true
+        cleared_flag = true
+    end
+    if options[:cleared_flag] == "false" or options[:cleared_flag] == false
+        cleared_flag = false
+    end
+
+    iap_version_dict_1 = iap_version_dict
+    puts cleared_flag.class
+    puts cleared_flag
+    puts "---------------------000000---------------------------------"
+    
+
+    update_normal_subscription(product_id: product_id,
+                        reference_name: "#{reference_name}",
+                        review_notes: "#{review_notes}",
+                        iap_version_dict: iap_version_dict_1,
+                        review_pic_url: "#{review_pic_url}",
+                        merch_pic_url: "#{merch_pic_url}",
+                        price_tier: "#{price_tier}",
+                        cleared_flag: "#{cleared_flag}")
+end
