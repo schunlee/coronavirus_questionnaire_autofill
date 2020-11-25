@@ -22,43 +22,8 @@ module Fastlane
         UI.message("find parameter >> product_id:#{product_id} 🌸")
         UI.message("find parameter >> promotion_flag:#{promotion_flag} 🌸")
         UI.message("find parameter >> order_num:#{order_num} 🌸")
-
-        Spaceship::Tunes.login($FASTLANE_USER, $FASTLANE_PASSWORD)
-        app = Spaceship::Application.find(ENV['APP_IDENTIFIER'])
-        itc_cookie_content = Spaceship::Tunes.client.store_cookie
-        cookies = YAML.safe_load(
-           itc_cookie_content,
-           [HTTP::Cookie, Time], # classes whitelist
-           [],                   # symbols whitelist
-           true                  # allow YAML aliases
-         )
-
-         # We remove all the un-needed cookies
-         cookies.select! do |cookie|
-           cookie.name.start_with?("myacinfo") || cookie.name == 'dqsid'
-         end
-        cookies = cookies.join(sep=";",)
-        app_id = app.apple_id
-
-        target_reference_name = ''
-        app.in_app_purchases.all.each do | purch |
-            puts purch
-            if purch.product_id == product_id
-                target_reference_name = purch.reference_name
-            end
-        end
-        if target_reference_name == ''
-            raise Exception.new "\u001b[31mCannot find such product_id 👿"
-        end
-
-
-        promotions_list = list_promotions(cookies, app_id)
-        promotion_data = wrap_update_promotions(target_reference_name, promotions_list, promotion_flag, order_num)
-        puts promotion_data
-        puts update_promotions(cookies, app_id, promotion_data.to_json)
-      end
-
-      def update_promotions(cookies, app_id, promotion_data)
+        
+        def update_promotions(cookies, app_id, promotion_data)
           resp = Faraday.post("https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/apps/#{app_id}/iaps/merch") do |req|
              req.headers = {"Accept" => "application/json, text/plain, */*",
                             "Content-Type" => "application/json;charset=UTF-8",
@@ -109,7 +74,40 @@ module Fastlane
          return resp_json["data"]
       end
 
+        Spaceship::Tunes.login($FASTLANE_USER, $FASTLANE_PASSWORD)
+        app = Spaceship::Application.find(ENV['APP_IDENTIFIER'])
+        itc_cookie_content = Spaceship::Tunes.client.store_cookie
+        cookies = YAML.safe_load(
+           itc_cookie_content,
+           [HTTP::Cookie, Time], # classes whitelist
+           [],                   # symbols whitelist
+           true                  # allow YAML aliases
+         )
 
+         # We remove all the un-needed cookies
+         cookies.select! do |cookie|
+           cookie.name.start_with?("myacinfo") || cookie.name == 'dqsid'
+         end
+        cookies = cookies.join(sep=";",)
+        app_id = app.apple_id
+
+        target_reference_name = ''
+        app.in_app_purchases.all.each do | purch |
+            if purch.product_id == product_id
+                target_reference_name = purch.reference_name
+            end
+        end
+        if target_reference_name == ''
+            raise Exception.new "\u001b[31mCannot find such product_id 👿"
+        end
+
+
+        promotions_list = list_promotions(cookies, app_id)
+        promotion_data = wrap_update_promotions(target_reference_name, promotions_list, promotion_flag, order_num)
+        puts promotion_data
+        puts update_promotions(cookies, app_id, promotion_data.to_json)
+      end
+      
       #####################################################
       # @!group Documentation
       #####################################################
