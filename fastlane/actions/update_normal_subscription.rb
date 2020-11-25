@@ -57,7 +57,6 @@ module Fastlane
                     end
                     e.review_screenshot = "review.png"
                     puts e.review_notes
-                    e.review_notes = e.review_notes
                 end
                 if merch_pic_url != nil and merch_pic_url != ""
                     puts "merch_pic_url"
@@ -66,10 +65,10 @@ module Fastlane
                     end
                     e.merch_screenshot = "merch.png"
                 end
-                if review_notes != ""
-                    puts "review_notes"
-                    e.review_notes = review_notes
-                end
+                #if review_notes != ""
+                #    puts "review_notes"
+                #    e.review_notes = review_notes
+               # end
                 if reference_name != ""
                     puts "reference_name"
                     e.reference_name = reference_name
