@@ -55,6 +55,8 @@ module Fastlane
                         file << open(review_pic_url).read
                     end
                     e.review_screenshot = "review.png"
+                    puts e.review_notes
+                    e.review_notes = e.review_notes
                 end
                 if merch_pic_url != nil and merch_pic_url != ""
                     puts "merch_pic_url"
