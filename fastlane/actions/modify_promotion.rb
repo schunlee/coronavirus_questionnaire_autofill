@@ -50,10 +50,8 @@ module Fastlane
             raise Exception.new "\u001b[31mCannot find such product_id 👿"
         end
 
-
         promotions_list = list_promotions(cookies, app_id)
         promotion_data = wrap_update_promotions(target_reference_name, promotions_list, promotion_flag, order_num)
-        puts promotion_data
         puts update_promotions(cookies, app_id, promotion_data.to_json)
       end
       
