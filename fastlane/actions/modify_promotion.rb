@@ -49,8 +49,9 @@ module Fastlane
         if target_reference_name == ''
             raise Exception.new "\u001b[31mCannot find such product_id 👿"
         end
-
+        UI.message "0️⃣ List App Store Promotions"
         promotions_list = list_promotions(cookies, app_id)
+        UI.message "1️⃣ Update target promotion"
         promotion_data = wrap_update_promotions(target_reference_name, promotions_list, promotion_flag, order_num)
         puts update_promotions(cookies, app_id, promotion_data.to_json)
         UI.message "👏👏👏👏👏👏👏👏👏👏👏👏👏👏👏👏"
