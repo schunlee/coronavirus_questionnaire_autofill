@@ -53,6 +53,7 @@ module Fastlane
         promotions_list = list_promotions(cookies, app_id)
         promotion_data = wrap_update_promotions(target_reference_name, promotions_list, promotion_flag, order_num)
         puts update_promotions(cookies, app_id, promotion_data.to_json)
+        UI.message "💯 💯 💯"
       end
       
       #####################################################
@@ -151,7 +152,7 @@ module Fastlane
 
       def self.authors
         # So no one will ever forget your contribution to fastlane :) You are awesome btw!
-        ["Your GitHub/Twitter Name"]
+        [""]
       end
 
       def self.is_supported?(platform)
