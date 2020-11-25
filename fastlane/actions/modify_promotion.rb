@@ -23,57 +23,6 @@ module Fastlane
         UI.message("find parameter >> promotion_flag:#{promotion_flag} 🌸")
         UI.message("find parameter >> order_num:#{order_num} 🌸")
         
-        def update_promotions(cookies, app_id, promotion_data)
-          resp = Faraday.post("https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/apps/#{app_id}/iaps/merch") do |req|
-             req.headers = {"Accept" => "application/json, text/plain, */*",
-                            "Content-Type" => "application/json;charset=UTF-8",
-                            "X-Csrf-Itc": "itc",
-                            "User-Agent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36",
-                            "Cookie" => cookies ,
-                            }
-             req.body = promotion_data
-          end
-          resp_dict = JSON.parse resp.body
-          return resp_dict
-      end
-
-
-      def wrap_update_promotions(reference_name, promotions_list, promotion_flag, order_num)
-          target_obj = nil
-          promotions_list.each do |item|
-              if item["referenceName"] == reference_name
-                  item.update({:isActive => promotion_flag})
-                  target_obj = item
-              end
-          end
-          promotions_list.delete(target_obj)
-          promotions_list.insert(order_num-1, target_obj)
-          promotions_list.each_index do |index|
-              promotions_list[index].update({:sortPosition => index})
-          end
-          return promotions_list
-      end
-
-
-      def list_promotions(cookies, app_id)
-         resp = Faraday.get("https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/apps/#{app_id}/iaps/merch") do |req|
-             req.headers['Accept'] = 'application/json, text/plain, */*'
-             req.headers['Cookie'] = cookies
-             req.headers['User-Agent'] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"
-         end
-         resp_json = JSON.parse resp.body
-         table = Terminal::Table.new do |t|
-              t << ["App Store Promotions"]
-              t << :separator
-              resp_json["data"].each do |item|
-                  #puts item
-                  t.add_row [item.to_s]
-              end
-         end
-         puts table
-         return resp_json["data"]
-      end
-
         Spaceship::Tunes.login($FASTLANE_USER, $FASTLANE_PASSWORD)
         app = Spaceship::Application.find(ENV['APP_IDENTIFIER'])
         itc_cookie_content = Spaceship::Tunes.client.store_cookie
@@ -114,6 +63,55 @@ module Fastlane
 
       def self.description
         "A short description with <= 80 characters of what this action does"
+      end
+      
+      def self.wrap_update_promotions(reference_name, promotions_list, promotion_flag, order_num)
+          target_obj = nil
+          promotions_list.each do |item|
+              if item["referenceName"] == reference_name
+                  item.update({:isActive => promotion_flag})
+                  target_obj = item
+              end
+          end
+          promotions_list.delete(target_obj)
+          promotions_list.insert(order_num-1, target_obj)
+          promotions_list.each_index do |index|
+              promotions_list[index].update({:sortPosition => index})
+          end
+          return promotions_list
+      end
+      
+      def self.update_promotions(cookies, app_id, promotion_data)
+          resp = Faraday.post("https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/apps/#{app_id}/iaps/merch") do |req|
+             req.headers = {"Accept" => "application/json, text/plain, */*",
+                            "Content-Type" => "application/json;charset=UTF-8",
+                            "X-Csrf-Itc": "itc",
+                            "User-Agent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36",
+                            "Cookie" => cookies ,
+                            }
+             req.body = promotion_data
+          end
+          resp_dict = JSON.parse resp.body
+          return resp_dict
+      end
+      
+      def self.list_promotions(cookies, app_id)
+         resp = Faraday.get("https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/apps/#{app_id}/iaps/merch") do |req|
+             req.headers['Accept'] = 'application/json, text/plain, */*'
+             req.headers['Cookie'] = cookies
+             req.headers['User-Agent'] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"
+         end
+         resp_json = JSON.parse resp.body
+         table = Terminal::Table.new do |t|
+              t << ["App Store Promotions"]
+              t << :separator
+              resp_json["data"].each do |item|
+                  #puts item
+                  t.add_row [item.to_s]
+              end
+         end
+         puts table
+         return resp_json["data"]
       end
 
       def self.details
