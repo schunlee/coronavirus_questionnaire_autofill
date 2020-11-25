@@ -53,7 +53,7 @@ module Fastlane
         promotions_list = list_promotions(cookies, app_id)
         promotion_data = wrap_update_promotions(target_reference_name, promotions_list, promotion_flag, order_num)
         puts update_promotions(cookies, app_id, promotion_data.to_json)
-        UI.message "💯 💯 💯"
+        UI.message "👏👏👏👏👏👏👏👏👏👏👏👏👏👏👏👏"
       end
       
       #####################################################
