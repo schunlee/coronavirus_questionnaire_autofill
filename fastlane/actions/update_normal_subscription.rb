@@ -77,8 +77,10 @@ module Fastlane
                     puts e.pricing_intervals[0][:tier] = "#{price_tier}"
                 end
                 puts e.save!
+                UI.message "👏👏👏👏👏👏👏👏👏👏👏👏👏👏👏👏"
                 return
             end
+          
             
         end
         raise Exception.new "\n\u001b[31mCannot find IAP(product_id) ==> #{product_id}👿"
