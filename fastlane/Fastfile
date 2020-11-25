@@ -112,6 +112,15 @@ lane :delete_subscription do |options|
     remove_subscription(product_id: product_id)
 end
 
+
+lane :update_promotion do |options|
+    puts options
+    product_id = options[:product_id]
+    promotion_flag = options[:promotion_flag]
+    order_num = options[:order_num]
+    modify_promotion(product_id: product_id, order_num: order_num, promotion_flag: promotion_flag)
+end
+
 lane :modify_normal_subscription do |options|
     puts options
     product_id = options[:product_id]
