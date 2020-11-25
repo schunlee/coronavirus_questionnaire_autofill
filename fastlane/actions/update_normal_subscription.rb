@@ -40,6 +40,7 @@ module Fastlane
         for i in 0..iaps.size - 1
             if iaps.at(i).product_id == product_id
                 e = iaps.at(i).edit
+                puts e
                 if iap_version_dict != {} and iap_version_dict != nil
                     puts "iap_version_dict"
                     e.versions = iap_version_dict
