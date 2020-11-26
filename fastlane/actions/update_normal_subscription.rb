@@ -34,12 +34,28 @@ module Fastlane
 
         Spaceship::Tunes.login($FASTLANE_USER, $FASTLANE_PASSWORD)
         app = Spaceship::Application.find(ENV['APP_IDENTIFIER'])
+        
+        itc_cookie_content = Spaceship::Tunes.client.store_cookie
+        cookies = YAML.safe_load(
+           itc_cookie_content,
+           [HTTP::Cookie, Time], # classes whitelist
+           [],                   # symbols whitelist
+           true                  # allow YAML aliases
+         )
+
+         # We remove all the un-needed cookies
+         cookies.select! do |cookie|
+           cookie.name.start_with?("myacinfo") || cookie.name == 'dqsid'
+         end
+        cookies = cookies.join(sep=";",)
+        app_id = app.apple_id
 
         iaps = app.in_app_purchases.all
 
         for i in 0..iaps.size - 1
             if iaps.at(i).product_id == product_id
                 e = iaps.at(i).edit
+                puts get_promotion_review_notes(cookies, app_id, iap_id)
                 puts e
                 if iap_version_dict != {} and iap_version_dict != nil
                     puts "iap_version_dict"
