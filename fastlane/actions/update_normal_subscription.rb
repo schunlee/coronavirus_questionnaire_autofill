@@ -148,6 +148,7 @@ module Fastlane
                     FastlaneCore::ConfigItem.new(key: :review_pic_url,
                                                  env_name: "FL_NORMAL_SUBSCRIPTION_DEVELOPMENT",
                                                  default_value: nil,
+                                                 type: Symbol,
                                                  description: "Create a development certificate instead of a distribution one"),
                     FastlaneCore::ConfigItem.new(key: :merch_pic_url,
                                                  env_name: "FL_NORMAL_SUBSCRIPTION_DEVELOPMENT",
