@@ -19,6 +19,8 @@ module Fastlane
         cleared_flag = params[:cleared_flag]
         price_tier = params[:price_tier]
         
+        puts review_pic_url.class
+        
         puts "#########################################"
 
 
