@@ -66,7 +66,7 @@ module Fastlane
                   e.cleared_for_sale = cleared_flag
                 end
               
-                if review_pic_url != nil and review_pic_url != ""
+                if review_pic_url != nil
                     puts "review_pic_url"
                     open("review.png", "wb") do |file|
                         file << open(review_pic_url).read
