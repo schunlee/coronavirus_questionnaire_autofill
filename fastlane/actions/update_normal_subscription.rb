@@ -56,6 +56,7 @@ module Fastlane
             if iaps.at(i).product_id == product_id
                 e = iaps.at(i).edit
                 origin_review_notes = get_promotion_review_notes(cookies, app_id, e.purchase_id)
+                puts "origin_review_notes >> #{origin_review_notes} 🌸"
                 if iap_version_dict != {} and iap_version_dict != nil
                     puts "iap_version_dict"
                     e.versions = iap_version_dict
