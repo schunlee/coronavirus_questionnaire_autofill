@@ -85,7 +85,7 @@ module Fastlane
                     puts "review_notes"
                     e.review_notes = review_notes
                 else
-                    e.review_notes = origin_review_notes
+                    e.review_notes = origin_review_notes # fix bugs on Spaceship https://github.com/fastlane/fastlane/discussions/17671
                 end
                 if reference_name != ""
                     puts "reference_name"
