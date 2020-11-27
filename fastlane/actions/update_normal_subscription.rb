@@ -76,7 +76,7 @@ module Fastlane
                     e.review_screenshot = "review.png"
                 end
                 if review_pic_url == ""
-                    puts "review_pic_url"
+                    puts "clear review_pic_url"
                     e.review_screenshot = nil
                 end
                 if merch_pic_url != nil and merch_pic_url != ""
