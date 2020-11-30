@@ -77,20 +77,9 @@ module Fastlane
                     e.review_screenshot = "review.png"
                 end
                 if review_pic_url == ""
-                    puts "clear review_pic_url"
-                    e.review_screenshot["size"] = nil
-                    e.review_screenshot["width"] = nil
-                    e.review_screenshot["height"] = nil
-                    e.review_screenshot["checksum"] = nil
-                    e.review_screenshot["assetToken"] = nil
-                    e.review_screenshot["sortOrder"] = nil
-                    e.review_screenshot["originalFileName"] = nil
-                    e.review_screenshot["type"] = nil
-                    puts e.review_screenshot["url"]
-                    e.review_screenshot["url"] = nil
-                    e.review_screenshot["thumbNailUrl"] = nil
-                    puts e.review_screenshot
+                    raise Exception.new "\n\u001b[31mCannot remove IAP review picture via `modify_normal_subscription` lane👿."
                 end
+              
                 if merch_pic_url != nil and merch_pic_url != ""
                     puts "merch_pic_url"
                     open("merch.png", "wb") do |file|
@@ -98,6 +87,10 @@ module Fastlane
                     end
                     e.merch_screenshot = "merch.png"
                 end
+                if merch_pic_url == ""
+                    raise Exception.new "\n\u001b[31mCannot remove IAP promotion picture via `modify_normal_subscription` lane👿."
+                end
+              
                 if review_notes != ""
                     puts "review_notes"
                     e.review_notes = review_notes
