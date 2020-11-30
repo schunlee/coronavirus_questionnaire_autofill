@@ -65,7 +65,8 @@ module Fastlane
                     e.versions = iap_version_dict
                 end
 
-                if price_tier != nil
+                if cleared_flag != nil
+                  puts "cleared_flag"
                   e.cleared_for_sale = cleared_flag
                 end
               
