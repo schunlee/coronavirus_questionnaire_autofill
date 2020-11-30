@@ -2,6 +2,7 @@ desc "Test Custom Actions"
 
 lane :change_server_notifications_url do |options|
     server_url = options[:server_url]
+    puts "---------------------Fastfile ✨---------------------------------"
     update_app_store_server_notifications(server_url: server_url)
 end
 
@@ -12,9 +13,8 @@ lane :switch_billing_grace_period do |options|
     else
         opt_in_flag = "false"
     end
-    puts "************ 1 ***********"
     puts opt_in_flag
-    puts "************ 2 ***********"
+    puts "---------------------Fastfile ✨---------------------------------"
     update_billing_grace_period(opt_in: opt_in_flag)
 end
 
@@ -27,6 +27,7 @@ lane :update_pre_order do |options|
     end
     puts pre_order_flag
     pre_order_date = options[:pre_order_date]
+    puts "---------------------Fastfile ✨---------------------------------"
     set_pre_order(pre_order_flag: pre_order_flag, pre_order_date: pre_order_date)
 end
 
@@ -39,6 +40,7 @@ lane :set_country_availability do |options|
         exclude_cn = "false"
     end
     puts exclude_cn
+    puts "---------------------Fastfile ✨---------------------------------"
     update_country_availability(exclude_cn: exclude_cn)
 end
 
@@ -47,6 +49,7 @@ lane :update_introductory_offers do |options|
     us_tier_num = options[:us_tier_num]
     duration_periods = options[:duration_periods]
     offer_type = options[:offer_type]
+    puts "---------------------Fastfile ✨---------------------------------"
     set_introductory_offers(product_id: product_id, us_tier_num: us_tier_num, duration_periods: duration_periods, offer_type: offer_type)
 end
 
@@ -68,7 +71,7 @@ lane :create_auto_renewable_subscription do |options|
     else
         cleared_flag = "false"
     end
-    
+    puts "---------------------Fastfile ✨---------------------------------"
     auto_renewable_subscription(group_name: group_name, 
                                 reference_name: reference_name, 
                                 product_id: product_id, 
@@ -100,7 +103,8 @@ lane :create_normal_subscription do |options|
         cleared_flag = "false"
     end
     
-    puts "88888888888 cleared_flag == > #{cleared_flag}"
+    puts "cleared_flag == > #{cleared_flag}"
+    puts "---------------------Fastfile ✨---------------------------------"
     
     normal_subscription(product_id: product_id, reference_name: reference_name, review_notes: review_notes, review_pic_url: review_pic_url, merch_pic_url: merch_pic_url,
                         cleared_flag: cleared_flag, iap_version_dict: iap_version_dict, price_tier: price_tier, subscription_type: subscription_type)
@@ -109,6 +113,7 @@ end
 lane :delete_subscription do |options|
     puts options
     product_id = options[:product_id]
+    puts "---------------------Fastfile ✨---------------------------------"
     remove_subscription(product_id: product_id)
 end
 
@@ -118,6 +123,7 @@ lane :update_promotion do |options|
     product_id = options[:product_id]
     promotion_flag = options[:promotion_flag]
     order_num = options[:order_num]
+    puts "---------------------Fastfile ✨---------------------------------"
     modify_promotion(product_id: product_id, order_num: order_num, promotion_flag: promotion_flag)
 end
 
@@ -149,9 +155,8 @@ lane :modify_normal_subscription do |options|
     iap_version_dict_1 = iap_version_dict
     puts cleared_flag.class
     puts cleared_flag
-    puts "---------------------000000---------------------------------"
+    puts "---------------------Fastfile ✨---------------------------------"
     
-
     update_normal_subscription(product_id: product_id,
                         reference_name: "#{reference_name}",
                         review_notes: "#{review_notes}",
