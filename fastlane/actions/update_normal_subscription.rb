@@ -89,6 +89,7 @@ module Fastlane
                     puts e.review_screenshot["url"]
                     e.review_screenshot["url"] = nil
                     e.review_screenshot["thumbNailUrl"] = nil
+                    puts e.review_screenshot
                 end
                 if merch_pic_url != nil and merch_pic_url != ""
                     puts "merch_pic_url"
