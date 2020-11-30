@@ -88,7 +88,7 @@ module Fastlane
                     else
                         e.review_notes = origin_review_notes # fix bugs on Spaceship https://github.com/fastlane/fastlane/discussions/17671
                 if price_tier != nil and price_tier != ""
-                    e.subscription_price_target[:tier] = price_tier
+                    e.subscription_price_target = {currency: "USD", tier: price_tier}
                 end
                 puts e.save!
                 UI.message "👏👏👏👏👏👏👏👏👏👏👏👏👏👏👏👏"
