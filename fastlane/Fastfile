@@ -131,6 +131,10 @@ lane :modify_normal_subscription do |options|
     merch_pic_url = options[:merch_pic_url] || nil
     price_tier = options[:price_tier] || nil
     
+    if review_pic_url == ""
+        raise Exception.new "\n\u001b[31mCannot remove IAP review picture via `modify_normal_subscription` lane👿."
+    end
+    
     cleared_flag = nil
     if options[:cleared_flag] == "true" or options[:cleared_flag] == true
         cleared_flag = true
