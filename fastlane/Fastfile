@@ -166,3 +166,45 @@ lane :modify_normal_subscription do |options|
                         price_tier: "#{price_tier}",
                         cleared_flag: "#{cleared_flag}")
 end
+
+lane :modify_auto_renewable_subscription do |options|
+    puts options
+    product_id = options[:product_id]
+    reference_name = options[:reference_name] || nil
+    review_notes = options[:review_notes] || nil
+    iap_version_dict = options[:iap_version_dict] || {}
+    review_pic_url = options[:review_pic_url] || nil
+    merch_pic_url = options[:merch_pic_url] || nil
+    price_tier = options[:price_tier] || nil
+    subscription_duration = options[:subscription_duration] || nil
+    
+    if review_pic_url == ""
+        raise Exception.new "\n\u001b[31mCannot remove IAP review picture via `modify_auto_renewable_subscription` lane👿."
+    end
+    if merch_pic_url == ""
+        raise Exception.new "\n\u001b[31mCannot remove IAP promotion picture via `modify_auto_renewable_subscription` lane👿."
+    end
+    
+    cleared_flag = nil
+    if options[:cleared_flag] == "true" or options[:cleared_flag] == true
+        cleared_flag = true
+    end
+    if options[:cleared_flag] == "false" or options[:cleared_flag] == false
+        cleared_flag = false
+    end
+
+    iap_version_dict_1 = iap_version_dict
+    puts cleared_flag.class
+    puts cleared_flag
+    puts "---------------------Fastfile ✨---------------------------------"
+    
+    update_auto_renewable_subscription(product_id: product_id,
+                        reference_name: "#{reference_name}",
+                        review_notes: "#{review_notes}",
+                        iap_version_dict: iap_version_dict_1,
+                        review_pic_url: "#{review_pic_url}",
+                        merch_pic_url: "#{merch_pic_url}",
+                        price_tier: "#{price_tier}",
+                        cleared_flag: "#{cleared_flag}",
+                        subscription_duration: "#{subscription_duration}")
+end
