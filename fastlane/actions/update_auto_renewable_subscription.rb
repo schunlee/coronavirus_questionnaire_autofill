@@ -55,40 +55,46 @@ module Fastlane
         for i in 0..iaps.size - 1
             if iaps.at(i).product_id == product_id
                 e = iaps.at(i).edit
-            end
-            if subscription_duration != nil
-                if not ["1w", "1m", "2m", "3m", "6m", "1y"].map{|e|e}.include? duration
-                    raise Exception.new "\u001b[31mWrong duration for IAP (valid duration values ==> 1w, 1m, 2m, 3m, 6m, 1y) 👿"
+                origin_review_notes = get_promotion_review_notes(cookies, app_id, e.purchase_id)
+                puts "origin_review_notes >> #{origin_review_notes} 🌸"
+                if subscription_duration != nil
+                    if not ["1w", "1m", "2m", "3m", "6m", "1y"].map{|e|e}.include? duration
+                        raise Exception.new "\u001b[31mWrong duration for IAP (valid duration values ==> 1w, 1m, 2m, 3m, 6m, 1y) 👿"
+                    end
+                    e.subscription_duration = subscription_duration
                 end
-                e.subscription_duration = subscription_duration
-            end
-            if iap_version_dict != {} and iap_version_dict != nil
-                e.version = iap_version_dict
-            end
-            if cleared_flag != nil and cleared_flag != ""
-                e.cleared_for_sale = cleared_flag
-            end
-            if review_pic_url != nil and review_pic_url != ""
-                open("review.png", "wb") do |file|
-                    file << open(review_pic_url).read
+                if iap_version_dict != {} and iap_version_dict != nil
+                    e.version = iap_version_dict
                 end
-                e.review_screenshot = "review.png"
-            end
-            if merch_pic_url != nil and merch_pic_url != ""
-                open("merch.png", "wb") do |file|
-                    file << open(merch_pic_url).read
+                if cleared_flag != nil and cleared_flag != ""
+                    e.cleared_for_sale = cleared_flag
                 end
-                e.merch_screenshot = "merch.png"
+                if review_pic_url != nil and review_pic_url != ""
+                    open("review.png", "wb") do |file|
+                        file << open(review_pic_url).read
+                    end
+                    e.review_screenshot = "review.png"
+                end
+                if merch_pic_url != nil and merch_pic_url != ""
+                    open("merch.png", "wb") do |file|
+                        file << open(merch_pic_url).read
+                    end
+                    e.merch_screenshot = "merch.png"
+                end
+                if review_notes != ""
+                        puts "review_notes"
+                        e.review_notes = review_notes
+                    else
+                        e.review_notes = origin_review_notes # fix bugs on Spaceship https://github.com/fastlane/fastlane/discussions/17671
+                if price_tier != nil and price_tier != ""
+                    e.subscription_price_target["tier"] = price_tier
+                end
+                puts e.save!
+                UI.message "👏👏👏👏👏👏👏👏👏👏👏👏👏👏👏👏"
+                return
+                end
             end
-            if review_notes != nil and review_notes != ""
-                e.review_notes = review_notes
-            end
-            if price_tier != nil and price_tier != ""
-                e.subscription_price_target["tier"] = price_tier
-            end
-            puts e.save!
-        end
-        raise Exception.new "\n\u001b[31mCannot find IAP(product_id) ==> #{product_id}👿"
+            raise Exception.new "\n\u001b[31mCannot find IAP(product_id) ==> #{product_id}👿"
       end
 
       #####################################################
