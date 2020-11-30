@@ -78,17 +78,17 @@ module Fastlane
                 end
                 if review_pic_url == ""
                     puts "clear review_pic_url"
-                    e.review_screenshot[:size] = nil
-                    e.review_screenshot[:width] = nil
-                    e.review_screenshot[:height] = nil
-                    e.review_screenshot[:checksum] = nil
-                    e.review_screenshot[:assetToken] = nil
-                    e.review_screenshot[:sortOrder] = nil
-                    e.review_screenshot[:originalFileName] = nil
-                    e.review_screenshot[:type] = nil
+                    e.review_screenshot["size"] = nil
+                    e.review_screenshot["width"] = nil
+                    e.review_screenshot["height"] = nil
+                    e.review_screenshot["checksum"] = nil
+                    e.review_screenshot["assetToken"] = nil
+                    e.review_screenshot["sortOrder"] = nil
+                    e.review_screenshot["originalFileName"] = nil
+                    e.review_screenshot["type"] = nil
                     puts e.review_screenshot["url"]
-                    e.review_screenshot[:url] = nil
-                    e.review_screenshot[:thumbNailUrl] = nil
+                    e.review_screenshot["url"] = nil
+                    e.review_screenshot["thumbNailUrl"] = nil
                 end
                 if merch_pic_url != nil and merch_pic_url != ""
                     puts "merch_pic_url"
