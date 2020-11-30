@@ -9,6 +9,8 @@ module Fastlane
         # fastlane will take care of reading in the parameter and fetching the environment variable:
         UI.message "💖💗💖💗 BEGIN 💖💗💖💗"
         UI.message "🍭 \u001b[36;1mUpdate Auto Renewable IAP"
+        
+        # https://github.com/fastlane/fastlane/pull/7834
 
         product_id = params[:product_id]
         reference_name = params[:reference_name]
@@ -20,7 +22,6 @@ module Fastlane
         price_tier = params[:price_tier]
         subscription_duration = params[:subscription_duration]
 
-
         UI.message("find parameter >> product_id:#{product_id} 🌸")
         UI.message("find parameter >> reference_name:#{reference_name} 🌸")
         UI.message("find parameter >> review_notes:#{review_notes} 🌸")
@@ -30,7 +31,6 @@ module Fastlane
         UI.message("find parameter >> price_tier:#{price_tier} 🌸")
         UI.message("find parameter >> iap_version_dict:#{iap_version_dict} 🌸")
         UI.message("find parameter >> subscription_duration:#{subscription_duration} 🌸")
-
 
         Spaceship::Tunes.login($FASTLANE_USER, $FASTLANE_PASSWORD)
         app = Spaceship::Application.find(ENV['APP_IDENTIFIER'])
