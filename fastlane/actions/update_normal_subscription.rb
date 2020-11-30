@@ -113,6 +113,8 @@ module Fastlane
                     puts e.pricing_intervals[0]
                     puts e.pricing_intervals[0][:tier] = "#{price_tier}"
                 end
+                puts "Save ... ..."
+                puts e
                 puts e.save!
                 UI.message "👏👏👏👏👏👏👏👏👏👏👏👏👏👏👏👏"
                 return
