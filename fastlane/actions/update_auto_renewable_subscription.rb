@@ -50,25 +50,25 @@ module Fastlane
             if iap_version_dict != {} and iap_version_dict != nil
                 e.version = iap_version_dict
             end
-            if cleared_flag != nil
+            if cleared_flag != nil and cleared_flag != ""
                 e.cleared_for_sale = cleared_flag
             end
-            if review_pic_url
+            if review_pic_url != nil and review_pic_url != ""
                 open("review.png", "wb") do |file|
                     file << open(review_pic_url).read
                 end
                 e.review_screenshot = "review.png"
             end
-            if merch_pic_url
+            if merch_pic_url != nil and merch_pic_url != ""
                 open("merch.png", "wb") do |file|
                     file << open(merch_pic_url).read
                 end
                 e.merch_screenshot = "merch.png"
             end
-            if review_notes
+            if review_notes != nil and review_notes != ""
                 e.review_notes = review_notes
             end
-            if price_tier
+            if price_tier != nil and price_tier != ""
                 e.subscription_price_target["tier"] = price_tier
             end
             puts e.save!
@@ -153,7 +153,7 @@ module Fastlane
 
       def self.authors
         # So no one will ever forget your contribution to fastlane :) You are awesome btw!
-        ["Your GitHub/Twitter Name"]
+        ["Bill.li"]
       end
 
       def self.is_supported?(platform)
