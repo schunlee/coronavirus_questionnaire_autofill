@@ -57,8 +57,8 @@ module Fastlane
                 e = iaps.at(i).edit
                 origin_review_notes = get_promotion_review_notes(cookies, app_id, e.purchase_id)
                 puts "origin_review_notes >> #{origin_review_notes} 🌸"
-                if subscription_duration != nil
-                    if not ["1w", "1m", "2m", "3m", "6m", "1y"].map{|e|e}.include? duration
+                if subscription_duration != nil and subscription_duration != ""
+                    if not ["1w", "1m", "2m", "3m", "6m", "1y"].map{|e|e}.include? subscription_duration
                         raise Exception.new "\u001b[31mWrong duration for IAP (valid duration values ==> 1w, 1m, 2m, 3m, 6m, 1y) 👿"
                     end
                     e.subscription_duration = subscription_duration
