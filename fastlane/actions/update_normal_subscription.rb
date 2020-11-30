@@ -76,9 +76,6 @@ module Fastlane
                     end
                     e.review_screenshot = "review.png"
                 end
-                if review_pic_url == ""
-                    raise Exception.new "\n\u001b[31mCannot remove IAP review picture via `modify_normal_subscription` lane👿."
-                end
               
                 if merch_pic_url != nil and merch_pic_url != ""
                     puts "merch_pic_url"
@@ -86,9 +83,6 @@ module Fastlane
                         file << open(merch_pic_url).read
                     end
                     e.merch_screenshot = "merch.png"
-                end
-                if merch_pic_url == ""
-                    raise Exception.new "\n\u001b[31mCannot remove IAP promotion picture via `modify_normal_subscription` lane👿."
                 end
               
                 if review_notes != ""
