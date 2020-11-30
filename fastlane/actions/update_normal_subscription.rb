@@ -86,7 +86,7 @@ module Fastlane
                     e.review_screenshot[:sortOrder] = nil
                     e.review_screenshot[:originalFileName] = nil
                     e.review_screenshot[:type] = nil
-                    puts e.review_screenshot[:url]
+                    puts e.review_screenshot["url"]
                     e.review_screenshot[:url] = nil
                     e.review_screenshot[:thumbNailUrl] = nil
                 end
