@@ -95,6 +95,7 @@ module Fastlane
                 end
             end
             raise Exception.new "\n\u001b[31mCannot find IAP(product_id) ==> #{product_id}👿"
+        end
       end
 
       #####################################################
