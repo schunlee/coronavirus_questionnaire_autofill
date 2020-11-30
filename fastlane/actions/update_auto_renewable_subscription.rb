@@ -153,7 +153,17 @@ module Fastlane
 
       def self.authors
         # So no one will ever forget your contribution to fastlane :) You are awesome btw!
-        ["Bill.li"]
+        ["bill.li"]
+      end
+      
+      def self.get_promotion_review_notes(cookies, app_id, iap_id)
+         resp = Faraday.get("https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/apps/#{app_id}/iaps/#{iap_id}") do |req|
+             req.headers['Accept'] = 'application/json, text/plain, */*'
+             req.headers['Cookie'] = cookies
+             req.headers['User-Agent'] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"
+         end
+         resp_json = JSON.parse resp.body
+         return resp_json["data"]["versions"][0]["reviewNotes"]["value"]
       end
 
       def self.is_supported?(platform)
