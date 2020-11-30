@@ -65,7 +65,7 @@ module Fastlane
                     e.subscription_duration = subscription_duration
                 end
                 if iap_version_dict != {} and iap_version_dict != nil
-                    e.version = iap_version_dict
+                    e.versions = iap_version_dict
                 end
                 if cleared_flag != nil and cleared_flag != ""
                     e.cleared_for_sale = cleared_flag
