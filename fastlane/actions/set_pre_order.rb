@@ -22,9 +22,9 @@ module Fastlane
         Spaceship::Tunes.login($FASTLANE_USER, $FASTLANE_PASSWORD)
         app = Spaceship::Application.find(ENV['APP_IDENTIFIER'])
         app_id = app.apple_id
-        app1 = Spaceship::ConnectAPI.get_app(app_id: app_id)
-        app_info = app1.fetch_edit_app_info
-        puts app_info
+        #app1 = Spaceship::ConnectAPI.get_app(app_id: app_id)
+        #app_info = app1.fetch_edit_app_info
+        #puts app_info
         
         
         
