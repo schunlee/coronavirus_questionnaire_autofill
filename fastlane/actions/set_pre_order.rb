@@ -23,6 +23,8 @@ module Fastlane
         
         app_id = app1.apple_id
         app = Spaceship::ConnectAPI.get_app(app_id: app_id)
+        app_info = app.fetch_edit_app_info
+        puts app_info
         
         availability = app.availability
         puts availability
