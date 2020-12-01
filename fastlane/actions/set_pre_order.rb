@@ -27,7 +27,6 @@ module Fastlane
         else
             availability.app_available_date = pre_order_date
         end
-        puts "..................."
         puts app.update_availability!(availability)
         #begin
         #    puts app.update_availability!(availability)
