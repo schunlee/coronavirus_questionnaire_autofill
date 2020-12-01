@@ -19,13 +19,7 @@ module Fastlane
         UI.message("find parameter >> pre_order_date:#{pre_order_date} 🌸")
 
         Spaceship::Tunes.login($FASTLANE_USER, $FASTLANE_PASSWORD)
-        app1 = Spaceship::Application.find(ENV['APP_IDENTIFIER'])
-        
-        app_id = app1.apple_id
-        app = Spaceship::ConnectAPI.get_app(app_id: app_id)
-        app_info = app.fetch_edit_app_info
-        puts app_info
-        
+        app = Spaceship::Application.find(ENV['APP_IDENTIFIER'])
         availability = app.availability
         puts availability
         availability.cleared_for_preorder = pre_order_flag
