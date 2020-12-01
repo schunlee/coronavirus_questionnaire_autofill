@@ -28,7 +28,7 @@ module Fastlane
         else
             availability.app_available_date = pre_order_date
         end
-        app.update_availability!(availability)
+        puts app.update_availability!(availability)
         UI.message "💯 💯 💯"
       end
 
