@@ -20,7 +20,8 @@ module Fastlane
 
         Spaceship::Tunes.login($FASTLANE_USER, $FASTLANE_PASSWORD)
         app1 = Spaceship::Application.find(ENV['APP_IDENTIFIER'])
-        app_id = app1.app_id
+        
+        app_id = app1.apple_id
         app = Spaceship::ConnectAPI.get_app(app_id: app_id)
         
         availability = app.availability
