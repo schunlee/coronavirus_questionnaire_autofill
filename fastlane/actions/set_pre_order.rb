@@ -1,3 +1,4 @@
+require 'spaceship'
 module Fastlane
   module Actions
     module SharedValues
