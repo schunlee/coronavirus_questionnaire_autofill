@@ -29,7 +29,11 @@ module Fastlane
             availability.app_available_date = pre_order_date
         end
         puts "..................."
-        puts app.update_availability!(availability)
+        begin
+            puts app.update_availability!(availability)
+        rescue Exception => e
+            puts e
+        end
         UI.message "💯 💯 💯"
       end
 
