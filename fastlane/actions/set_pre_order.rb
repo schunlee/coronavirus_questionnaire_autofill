@@ -20,15 +20,14 @@ module Fastlane
 
         Spaceship::Tunes.login($FASTLANE_USER, $FASTLANE_PASSWORD)
         app = Spaceship::Application.find(ENV['APP_IDENTIFIER'])
-        puts app
         availability = app.availability
         availability.cleared_for_preorder = pre_order_flag
-        puts "..................."
         if pre_order_flag.to_s == "false"
             availability.app_available_date = nil
         else
             availability.app_available_date = pre_order_date
         end
+        puts "..................."
         puts app.update_availability!(availability)
         UI.message "💯 💯 💯"
       end
