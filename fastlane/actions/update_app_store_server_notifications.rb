@@ -1,4 +1,4 @@
-require 'spaceship'
+#require 'spaceship'
 require 'yaml'
 require 'faraday'
 
