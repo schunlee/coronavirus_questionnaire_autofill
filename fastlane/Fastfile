@@ -46,7 +46,7 @@ end
 
 lane :update_introductory_offers do |options|
     product_id = options[:product_id]
-    us_tier_num = options[:us_tier_num]
+    us_tier_num = options[:us_tier_num] || nil
     duration_periods = options[:duration_periods]
     offer_type = options[:offer_type]
     puts "---------------------Fastfile ✨---------------------------------"
