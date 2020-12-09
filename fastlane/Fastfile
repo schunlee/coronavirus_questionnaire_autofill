@@ -66,6 +66,8 @@ lane :create_auto_renewable_subscription do |options|
     group_version_dict = options[:group_version_dict]
     iap_version_dict = options[:iap_version_dict]
     
+    puts iap_version_dict.class
+    
     if cleared_flag
         cleared_flag = "true"
     else
