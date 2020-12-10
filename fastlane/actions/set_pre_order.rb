@@ -23,11 +23,11 @@ module Fastlane
         app = Spaceship::Application.find(ENV['APP_IDENTIFIER'])
         #puts app
         app_id = app.apple_id
-        app1 = Spaceship::ConnectAPI.get_app(app_id: app_id)
+        app1 = Spaceship::ConnectAPI.get_app(app_id: app_id).first
         puts "^^^^^^^^^^^^^^^^^^^^"
-        puts app1.body
+        puts app1
         puts "^^^^^^^^^^^^^^^^^^^^"
-        puts app.update()
+        puts app1.update()
         availability = app.availability
         availability.cleared_for_preorder = pre_order_flag
         if pre_order_flag.to_s == "false"
