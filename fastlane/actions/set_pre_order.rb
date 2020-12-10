@@ -27,7 +27,7 @@ module Fastlane
         puts "^^^^^^^^^^^^^^^^^^^^"
         puts app1.body
         puts "^^^^^^^^^^^^^^^^^^^^"
-        puts app1.update()
+        puts app.update()
         availability = app.availability
         availability.cleared_for_preorder = pre_order_flag
         if pre_order_flag.to_s == "false"
