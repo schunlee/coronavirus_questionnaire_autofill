@@ -21,10 +21,12 @@ module Fastlane
 
         Spaceship::Tunes.login($FASTLANE_USER, $FASTLANE_PASSWORD)
         app = Spaceship::Application.find(ENV['APP_IDENTIFIER'])
-        puts app
+        #puts app
         app_id = app.apple_id
         app1 = Spaceship::ConnectAPI.get_app(app_id: app_id)
+        puts "^^^^^^^^^^^^^^^^^^^^"
         puts app1
+        puts "^^^^^^^^^^^^^^^^^^^^"
         availability = app.availability
         availability.cleared_for_preorder = pre_order_flag
         if pre_order_flag.to_s == "false"
