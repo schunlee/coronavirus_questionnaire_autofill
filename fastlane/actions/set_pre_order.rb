@@ -25,7 +25,7 @@ module Fastlane
         app_id = app.apple_id
         app1 = Spaceship::ConnectAPI.get_app(app_id: app_id).first
         puts "^^^^^^^^^^^^^^^^^^^^"
-        puts app1.prices
+        puts app1.appStoreVersions
         puts "^^^^^^^^^^^^^^^^^^^^"
         puts app1.update()
         availability = app.availability
