@@ -138,6 +138,7 @@ module Fastlane
           app.in_app_purchases.all.each do | purch |
             if purch.product_id == product_id
                e = purch.edit
+               puts e
                e.versions = version_dict
                e.cleared_for_sale = cleared_flag
                e.subscription_duration =  subscription_duration
