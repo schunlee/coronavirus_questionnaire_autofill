@@ -66,9 +66,9 @@ module Fastlane
         if not groups.map{|e|e.name}.include? group_name
             UI.message "🈳 Subscription Group (#{group_name}) NonExisted, so now creating it."
             create_family(app, group_name, reference_name, product_id, group_version_dict)
-            sleep(60)
+            sleep(10)
             UI.message "⏳ Updating default iap configs ..."
-            update_auto_renew_subscription(app, product_id, iap_version_dict, cleared_flag, duration, price_tier, review_notes, review_pic_url, merch_pic_url)
+            #update_auto_renew_subscription(app, product_id, iap_version_dict, cleared_flag, duration, price_tier, review_notes, review_pic_url, merch_pic_url)
         end
 
 
