@@ -54,6 +54,7 @@ lane :update_introductory_offers do |options|
 end
 
 lane :create_auto_renewable_subscription do |options|
+    puts "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
     puts options
     group_name = options[:group_name]
     reference_name = options[:reference_name]
@@ -66,8 +67,7 @@ lane :create_auto_renewable_subscription do |options|
     cleared_flag = options[:cleared_flag]
     group_version_dict = options[:group_version_dict]
     iap_version_dict = options[:iap_version_dict]
-    puts "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
-    puts iap_version_dict.class  
+    
     puts "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
     
     if cleared_flag
