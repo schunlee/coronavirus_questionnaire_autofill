@@ -29,7 +29,7 @@ module Fastlane
         #territory_ids = Spaceship::ConnectAPI::Territory.all
         #puts territory_ids
         puts "^^^^^^^^^^^^^^^^^^^^"
-        puts app1.update(attributes: {:cleared_for_preorder => true})
+        puts app1.update(attributes: {:preOrder.cleared_for_preorder => true})
         availability = app.availability
         availability.cleared_for_preorder = pre_order_flag
         if pre_order_flag.to_s == "false"
