@@ -67,11 +67,9 @@ module Fastlane
             UI.message "🈳 Subscription Group (#{group_name}) NonExisted, so now creating it."
             create_family(app, group_name, reference_name, product_id, group_version_dict)
             UI.message "⏳ Updating default iap configs ..."
-            sleep(30)
-            Spaceship::Tunes.login($FASTLANE_USER, $FASTLANE_PASSWORD)
-            new_app = Spaceship::Application.find(ENV['APP_IDENTIFIER'])
-            update_auto_renew_subscription(new_app, product_id, iap_version_dict, cleared_flag, duration, price_tier, review_notes, review_pic_url, merch_pic_url)
-            update_auto_renew_subscription(new_app, product_id, iap_version_dict, cleared_flag, duration, price_tier, review_notes, review_pic_url, merch_pic_url)
+            sleep(10)
+            update_auto_renew_subscription(app, product_id, iap_version_dict, cleared_flag, duration, price_tier, review_notes, review_pic_url, merch_pic_url)
+            update_auto_renew_subscription(app, product_id, iap_version_dict, cleared_flag, duration, price_tier, review_notes, review_pic_url, merch_pic_url)
         end
 
 
