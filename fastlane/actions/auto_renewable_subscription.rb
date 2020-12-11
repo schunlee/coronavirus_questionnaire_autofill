@@ -68,8 +68,10 @@ module Fastlane
             create_family(app, group_name, reference_name, product_id, group_version_dict)
             UI.message "⏳ Updating default iap configs ..."
             sleep(30)
-            app = Spaceship::Application.find(ENV['APP_IDENTIFIER'])
-            update_auto_renew_subscription(app, product_id, iap_version_dict, cleared_flag, duration, price_tier, review_notes, review_pic_url, merch_pic_url)
+            Spaceship::Tunes.login($FASTLANE_USER, $FASTLANE_PASSWORD)
+            new_app = Spaceship::Application.find(ENV['APP_IDENTIFIER'])
+            update_auto_renew_subscription(new_app, product_id, iap_version_dict, cleared_flag, duration, price_tier, review_notes, review_pic_url, merch_pic_url)
+            update_auto_renew_subscription(new_app, product_id, iap_version_dict, cleared_flag, duration, price_tier, review_notes, review_pic_url, merch_pic_url)
         end
 
 
