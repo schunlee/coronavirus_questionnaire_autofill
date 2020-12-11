@@ -76,7 +76,7 @@ lane :create_auto_renewable_subscription do |options|
                                 reference_name: reference_name, 
                                 product_id: product_id, 
                                 duration: duration, 
-                                price_tier: price_tier, 
+                                price_tier: price_tier.to_s, 
                                 cleared_flag: cleared_flag, 
                                 review_pic_url: review_pic_url, 
                                 merch_pic_url: merch_pic_url, 
