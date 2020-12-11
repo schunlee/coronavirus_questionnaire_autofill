@@ -54,6 +54,7 @@ lane :update_introductory_offers do |options|
 end
 
 lane :create_auto_renewable_subscription do |options|
+    puts options
     group_name = options[:group_name]
     reference_name = options[:reference_name]
     product_id = options[:product_id]
