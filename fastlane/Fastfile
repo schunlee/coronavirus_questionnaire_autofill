@@ -54,8 +54,6 @@ lane :update_introductory_offers do |options|
 end
 
 lane :create_auto_renewable_subscription do |options|
-    puts "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
-    puts options
     group_name = options[:group_name]
     reference_name = options[:reference_name]
     product_id = options[:product_id]
@@ -68,14 +66,12 @@ lane :create_auto_renewable_subscription do |options|
     group_version_dict = options[:group_version_dict]
     iap_version_dict = options[:iap_version_dict]
     
-    puts "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
-    
     if cleared_flag
         cleared_flag = "true"
     else
         cleared_flag = "false"
     end
-    puts "---------------------Fastfile ✨---------------------------------"
+    puts "--------------------- Fastfile ✨---------------------------------"
     auto_renewable_subscription(group_name: group_name, 
                                 reference_name: reference_name, 
                                 product_id: product_id, 
