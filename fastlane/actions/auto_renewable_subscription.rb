@@ -123,11 +123,11 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :group_version_dict,
                                        env_name: "FL_AUTO_RENEWABLE_SUBSCRIPTION_DEVELOPMENT",
                                        description: "Create a development certificate instead of a distribution one",
-                                       type: Hash),
+                                       ),
           FastlaneCore::ConfigItem.new(key: :iap_version_dict,
                                        env_name: "FL_AUTO_RENEWABLE_SUBSCRIPTION_DEVELOPMENT",
                                        description: "Create a development certificate instead of a distribution one",
-                                       type: Hash)
+                                       )
         ]
       end
 
