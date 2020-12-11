@@ -136,6 +136,7 @@ module Fastlane
 
       def self.update_auto_renew_subscription(app, product_id, version_dict, cleared_flag, subscription_duration, subscription_price_tier, review_notes, review_pic_url, merch_pic_url)
           app.in_app_purchases.all.each do | purch |
+            puts purch.product_id
             if purch.product_id == product_id
                e = purch.edit
                puts e
