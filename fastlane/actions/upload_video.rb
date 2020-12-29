@@ -45,10 +45,10 @@ module Fastlane
           if video_size.to_s.strip == "2208"
               puts video_size
               preview_types = ["IPHONE_35", "IPHONE_40", "IPHONE_47", "IPHONE_55"]
-          elseif size.to_s.strip == "2688"
+          elsif size.to_s.strip == "2688"
               puts video_size
               preview_types = ["IPHONE_65"]
-          elseif video_size.to_s.strip == "2732"
+          elsif video_size.to_s.strip == "2732"
               puts video_size
               preview_types = ["IPAD_PRO_129", "IPAD_PRO_3GEN_129"]
           else
