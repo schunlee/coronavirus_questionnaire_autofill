@@ -70,13 +70,12 @@ module Fastlane
                   end
               end
               if preview_set.nil?
-                  #puts("Skipping #{lan} >>> #{preview_type}; not create first in app store")
-                  #next
                   preview_set = localization.create_app_preview_set(attributes: {previewType: preview_type})
               end
               puts preview_set.upload_preview(path: video_path, wait_for_processing: false)
               puts "video #{video_path} be uploaded on App Store (language >> #{lan})"
           end
+      end
       end
 
       #####################################################
