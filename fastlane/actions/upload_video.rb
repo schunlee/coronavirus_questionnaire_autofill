@@ -11,11 +11,9 @@ module Fastlane
         UI.message "🍭 \u001b[36;1mUpload video app preview"
         video_path = params[:video_path]
         language = params[:language]
-        video_size = params[:video_size]
         
         UI.message("find video_path:#{video_path} 🌸")
         UI.message("find language:#{language} 🌸")
-        UI.message("find video_size:#{video_size} 🌸")
         
         Spaceship::Tunes.login($FASTLANE_USER, $FASTLANE_PASSWORD)
         app = Spaceship::ConnectAPI::App.find(ENV['APP_IDENTIFIER'])
@@ -27,27 +25,27 @@ module Fastlane
                 lan = localization.locale
                 if lan == language
                     puts "Only update video app preview on #{language}"
-                    upload_video(localization, lan, video_size, video_path)
+                    upload_video(localization, lan, video_path)
                 end
             end
         else
             puts "Only update video app preview on all languages"
             localizations.each do |localization|
                 lan = localization.locale
-                upload_video(localization, lan, video_size, video_path)
+                upload_video(localization, lan, video_path)
             end
         end #language
 
       end
 
-      def self.upload_video(localization, lan, video_size, video_path)
+      def self.upload_video(localization, lan, video_path)
           preview_sets = localization.get_app_preview_sets
           #Spaceship::ConnectAPI::AppPreviewSet::PreviewType::ALL.each do |preview_type|
-          if video_size.to_s.strip == "2208"
+          if video_path.include?("1920") or video_path.include?("1080")
               preview_types = ["IPHONE_35", "IPHONE_40", "IPHONE_47", "IPHONE_55"]
-          elsif video_size.to_s.strip == "2688"
+          elsif video_path.include?("886") or video_path.include?("1920")
               preview_types = ["IPHONE_65"]
-          elsif video_size.to_s.strip == "2732"
+          elsif video_path.include?("1200") or video_path.include?("1600")
               preview_types = ["IPAD_PRO_129", "IPAD_PRO_3GEN_129"]
           else
               preview_types = ["Not Found"]
@@ -93,9 +91,6 @@ module Fastlane
                                        env_name: "FL_UPLOAD_VIDEO_API_TOKEN", # The name of the environment variable
                                        description: "API Token for UploadVideoAction"),
           FastlaneCore::ConfigItem.new(key: :language,
-                                       env_name: "FL_UPLOAD_VIDEO_DEVELOPMENT",
-                                       description: "Create a development certificate instead of a distribution one"),
-          FastlaneCore::ConfigItem.new(key: :video_size,
                                        env_name: "FL_UPLOAD_VIDEO_DEVELOPMENT",
                                        description: "Create a development certificate instead of a distribution one")
         ]
