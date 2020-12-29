@@ -5,7 +5,6 @@ module Fastlane
     end
 
     class UploadVideoAction < Action
-      self.size_preview_dict = {"2208": ["IPHONE_35", "IPHONE_40", "IPHONE_47", "IPHONE_55"], "2688": ["IPHONE_65"], "2732": ["IPAD_PRO_129", "IPAD_PRO_3GEN_129"]}
       def self.run(params)
         # fastlane will take care of reading in the parameter and fetching the environment variable:
         UI.message "💖💗💖💗 BEGIN 💖💗💖💗"
@@ -13,7 +12,7 @@ module Fastlane
         language = params[:language]
         size = params[:size]
         
-        puts self.size_preview_dict
+        size_preview_dict = {"2208": ["IPHONE_35", "IPHONE_40", "IPHONE_47", "IPHONE_55"], "2688": ["IPHONE_65"], "2732": ["IPAD_PRO_129", "IPAD_PRO_3GEN_129"]}
 
         UI.message("find video_path:#{video_path} 🌸")
         UI.message("find language:#{language} 🌸")
@@ -29,23 +28,23 @@ module Fastlane
                 lan = localization.locale
                 if lan == language
                     puts "Only update video app preview on #{language}"
-                    upload_video(localization, lan, size, video_path)
+                    upload_video(localization, lan, size, video_path, size_preview_dict)
                 end
             end
         else
             puts "Only update video app preview on all languages"
             localizations.each do |localization|
                 lan = localization.locale
-                upload_video(localization, lan, size, video_path)
+                upload_video(localization, lan, size, video_path, size_preview_dict)
             end
         end #language
 
       end
 
-      def self.upload_video(localization, lan, size, video_path)
+      def self.upload_video(localization, lan, size, video_path, size_preview_dict)
           preview_sets = localization.get_app_preview_sets
           #Spaceship::ConnectAPI::AppPreviewSet::PreviewType::ALL.each do |preview_type|
-          preview_types = self.size_preview_dict[:size]
+          preview_types = size_preview_dict[:size]
           puts preview_types
           preview_types.each do |preview_type|
               puts("Process preview type #{preview_type}")
