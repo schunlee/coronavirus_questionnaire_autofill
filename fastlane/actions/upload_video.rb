@@ -10,11 +10,11 @@ module Fastlane
         UI.message "💖💗💖💗 BEGIN 💖💗💖💗"
         video_path = params[:video_path]
         language = params[:language]
-        size = params[:size]
+        video_size = params[:video_size]
         
         UI.message("find video_path:#{video_path} 🌸")
         UI.message("find language:#{language} 🌸")
-        UI.message("find size:#{size} 🌸")
+        UI.message("find video_size:#{video_size} 🌸")
         
         Spaceship::Tunes.login($FASTLANE_USER, $FASTLANE_PASSWORD)
         app = Spaceship::ConnectAPI::App.find(ENV['APP_IDENTIFIER'])
@@ -26,35 +26,35 @@ module Fastlane
                 lan = localization.locale
                 if lan == language
                     puts "Only update video app preview on #{language}"
-                    upload_video(localization, lan, size, video_path)
+                    upload_video(localization, lan, video_size, video_path)
                 end
             end
         else
             puts "Only update video app preview on all languages"
             localizations.each do |localization|
                 lan = localization.locale
-                upload_video(localization, lan, size, video_path)
+                upload_video(localization, lan, video_size, video_path)
             end
         end #language
 
       end
 
-      def self.upload_video(localization, lan, size, video_path)
+      def self.upload_video(localization, lan, video_size, video_path)
           preview_sets = localization.get_app_preview_sets
           #Spaceship::ConnectAPI::AppPreviewSet::PreviewType::ALL.each do |preview_type|
-          if size.to_s == "2208"
-              puts size
+          if video_size.to_s == "2208"
+              puts video_size
               preview_types = ["IPHONE_35", "IPHONE_40", "IPHONE_47", "IPHONE_55"]
           elseif size.to_s == "2688"
-              puts size
+              puts video_size
               preview_types = ["IPHONE_65"]
-          elseif size.to_s == "2732"
-              puts size
+          elseif video_size.to_s == "2732"
+              puts video_size
               preview_types = ["IPAD_PRO_129", "IPAD_PRO_3GEN_129"]
           else
               puts "Not Found"
           end
-          puts size
+          puts video_size
           puts preview_types
           puts "------------------------------------"
           preview_types.each do |preview_type|
@@ -106,7 +106,7 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :language,
                                        env_name: "FL_UPLOAD_VIDEO_DEVELOPMENT",
                                        description: "Create a development certificate instead of a distribution one"),
-          FastlaneCore::ConfigItem.new(key: :size,
+          FastlaneCore::ConfigItem.new(key: :video_size,
                                        env_name: "FL_UPLOAD_VIDEO_DEVELOPMENT",
                                        description: "Create a development certificate instead of a distribution one")
         ]
