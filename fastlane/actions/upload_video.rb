@@ -97,6 +97,9 @@ module Fastlane
                                        description: "API Token for UploadVideoAction"),
           FastlaneCore::ConfigItem.new(key: :language,
                                        env_name: "FL_UPLOAD_VIDEO_DEVELOPMENT",
+                                       description: "Create a development certificate instead of a distribution one"),
+          FastlaneCore::ConfigItem.new(key: :size,
+                                       env_name: "FL_UPLOAD_VIDEO_DEVELOPMENT",
                                        description: "Create a development certificate instead of a distribution one")
         ]
       end
