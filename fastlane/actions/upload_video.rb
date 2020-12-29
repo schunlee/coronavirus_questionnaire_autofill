@@ -19,8 +19,10 @@ module Fastlane
         Spaceship::Tunes.login($FASTLANE_USER, $FASTLANE_PASSWORD)
         app = Spaceship::ConnectAPI::App.find(ENV['APP_IDENTIFIER'])
         
-        SIZE_PREVIEW_DICT = {:"2208"=>["IPHONE_35", "IPHONE_40", "IPHONE_47", "IPHONE_55"], :"2688"=>["IPHONE_65"], :"2732"=>["IPAD_PRO_129", "IPAD_PRO_3GEN_129"]}
-
+        SIZE_PREVIEW_DICT = {"2208": ["IPHONE_35", "IPHONE_40", "IPHONE_47", "IPHONE_55"],
+                             "2688": ["IPHONE_65"],
+                             "2732": ["IPAD_PRO_129", "IPAD_PRO_3GEN_129"]}
+        
         app_version = app.get_edit_app_store_version(platform:Spaceship::ConnectAPI::Platform::IOS)
         localizations = app_version.get_app_store_version_localizations
         if language != ""
@@ -44,7 +46,8 @@ module Fastlane
       def self.upload_video(localization, lan, size, video_path)
           preview_sets = localization.get_app_preview_sets
           #Spaceship::ConnectAPI::AppPreviewSet::PreviewType::ALL.each do |preview_type|
-          preview_types = SIZE_PREVIEW_DICT[:size]
+          preview_types = 
+        [:size]
           puts preview_types
           preview_types.each do |preview_type|
               puts("Process preview type #{preview_type}")
