@@ -46,10 +46,10 @@ module Fastlane
               preview_set = preview_sets.find do |set|
                   set.preview_type == preview_type
               end
-              if preview_set.nil?
-                  puts("Skipping #{preview_type}; not create first in app store")
-                  next
-              end
+              #if preview_set.nil?
+              #    puts("Skipping #{preview_type}; not create first in app store")
+              #    next
+              #end
               # delete all existing previews
               if !preview_set.app_previews.empty?
                   preview_set.app_previews.each do |app_preview|
