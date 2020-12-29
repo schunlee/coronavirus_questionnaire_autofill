@@ -27,9 +27,9 @@ module Fastlane
                     upload_video(localization, lan, video_path)
                 end #localization
         else
-             localization.each do |localization|
-                 lan = localization.locale
-                 upload_video(localization, lan, video_path)
+            localization.each do |localization|
+                lan = localization.locale
+                upload_video(localization, lan, video_path)
         end #language
 
       end
