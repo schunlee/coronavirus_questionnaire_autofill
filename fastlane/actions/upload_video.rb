@@ -5,7 +5,7 @@ module Fastlane
     end
 
     class UploadVideoAction < Action
-      size_preview_dict = {"2208": ["IPHONE_35", "IPHONE_40", "IPHONE_47", "IPHONE_55"], "2688": ["IPHONE_65"], "2732": ["IPAD_PRO_129", "IPAD_PRO_3GEN_129"]}
+      self.size_preview_dict = {"2208": ["IPHONE_35", "IPHONE_40", "IPHONE_47", "IPHONE_55"], "2688": ["IPHONE_65"], "2732": ["IPAD_PRO_129", "IPAD_PRO_3GEN_129"]}
       def self.run(params)
         # fastlane will take care of reading in the parameter and fetching the environment variable:
         UI.message "💖💗💖💗 BEGIN 💖💗💖💗"
@@ -43,7 +43,7 @@ module Fastlane
       def self.upload_video(localization, lan, size, video_path)
           preview_sets = localization.get_app_preview_sets
           #Spaceship::ConnectAPI::AppPreviewSet::PreviewType::ALL.each do |preview_type|
-          preview_types = size_preview_dict[:size]
+          preview_types = self.size_preview_dict[:size]
           puts preview_types
           preview_types.each do |preview_type|
               puts("Process preview type #{preview_type}")
