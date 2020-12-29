@@ -58,6 +58,7 @@ module Fastlane
               end
               puts preview_set.upload_preview(path: video_path, wait_for_processing: false)
               puts "video #{video_path} be uploaded on App Store (language >> #{lan})"
+          end
       end
 
       #####################################################
