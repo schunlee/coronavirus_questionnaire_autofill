@@ -20,10 +20,10 @@ module Fastlane
         app_version = app.get_edit_app_store_version(platform:Spaceship::ConnectAPI::Platform::IOS)
         localizations = app_version.get_app_store_version_localizations
         if language != ""
-            puts "Only update video app preview on #{language}"
             localizations.each do |localization|
                 lan = localization.locale
                 if lan == language
+                    puts "Only update video app preview on #{language}"
                     upload_video(localization, lan, video_path)
                 end
             end
