@@ -48,8 +48,9 @@ module Fastlane
                   set.preview_type == preview_type
               end
               if preview_set.nil?
-                  puts("Skipping #{lan} >>> #{preview_type}; not create first in app store")
-                  next
+                  #puts("Skipping #{lan} >>> #{preview_type}; not create first in app store")
+                  #next
+                  preview_set = localization.create_app_preview_set(attributes: {previewType: preview_type})
               end
               # delete all existing previews
               if !preview_set.app_previews.empty?
