@@ -53,12 +53,12 @@ module Fastlane
                   preview_set = localization.create_app_preview_set(attributes: {previewType: preview_type})
               end
               # delete all existing previews
-              if !preview_set.app_previews.empty?
-                  preview_set.app_previews.each do |app_preview|
-                      puts("Deleting #{app_preview.id}")
-                      app_preview.delete!
-                  end
-              end
+              #if !preview_set.app_previews.empty?
+              #    preview_set.app_previews.each do |app_preview|
+              #        puts("Deleting #{app_preview.id}")
+              #        app_preview.delete!
+              #    end
+              #end
               puts preview_set.upload_preview(path: video_path, wait_for_processing: false)
               puts "video #{video_path} be uploaded on App Store (language >> #{lan})"
           end
