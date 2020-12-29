@@ -40,7 +40,7 @@ module Fastlane
       def self.upload_video(localization, lan, video_path)
           preview_sets = localization.get_app_preview_sets
           #Spaceship::ConnectAPI::AppPreviewSet::PreviewType::ALL.each do |preview_type|
-          ["IPHONE_55", "IPHONE_65"].each do |preview_type|
+          ["IPHONE_35", "IPHONE_40"].each do |preview_type|
               puts("Process preview type #{preview_type}")
 
               # find the preview set for this type
