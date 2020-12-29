@@ -44,8 +44,9 @@ module Fastlane
       def self.upload_video(localization, lan, size, video_path, size_preview_dict)
           preview_sets = localization.get_app_preview_sets
           #Spaceship::ConnectAPI::AppPreviewSet::PreviewType::ALL.each do |preview_type|
-          preview_types = size_preview_dict[:size]
+          preview_types = size_preview_dict[size]
           puts preview_types
+          puts "------------------------------------"
           preview_types.each do |preview_type|
               puts("Process preview type #{preview_type}")
 
