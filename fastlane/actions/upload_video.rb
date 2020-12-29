@@ -10,9 +10,16 @@ module Fastlane
         UI.message "💖💗💖💗 BEGIN 💖💗💖💗"
         video_path = params[:video_path]
         language = params[:language]
+        size = params[:size]
 
         UI.message("find video_path:#{video_path} 🌸")
         UI.message("find language:#{language} 🌸")
+        UI.message("find size:#{size} 🌸")
+        
+        SIZE_PREVIEW_DICT = {"2208": ["IPHONE_35", "IPHONE_40", "IPHONE_47", "IPHONE_55"],
+                             "2688": ["IPHONE_65"],
+                             "2732": ["IPAD_PRO_129", "IPAD_PRO_3GEN_129"]
+                            }
 
         Spaceship::Tunes.login($FASTLANE_USER, $FASTLANE_PASSWORD)
         app = Spaceship::ConnectAPI::App.find(ENV['APP_IDENTIFIER'])
@@ -24,41 +31,43 @@ module Fastlane
                 lan = localization.locale
                 if lan == language
                     puts "Only update video app preview on #{language}"
-                    upload_video(localization, lan, video_path)
+                    upload_video(localization, lan, size, video_path)
                 end
             end
         else
             puts "Only update video app preview on all languages"
             localizations.each do |localization|
                 lan = localization.locale
-                upload_video(localization, lan, video_path)
+                upload_video(localization, lan, size, video_path)
             end
         end #language
 
       end
 
-      def self.upload_video(localization, lan, video_path)
+      def self.upload_video(localization, lan, size, video_path)
           preview_sets = localization.get_app_preview_sets
           #Spaceship::ConnectAPI::AppPreviewSet::PreviewType::ALL.each do |preview_type|
-          ["IPHONE_35", "IPHONE_40"].each do |preview_type|
+          preview_types = SIZE_PREVIEW_DICT[:size]
+          puts preview_types
+          preview_types.each do |preview_type|
               puts("Process preview type #{preview_type}")
 
               # find the preview set for this type
               preview_set = preview_sets.find do |set|
                   set.preview_type == preview_type
               end
+              # delete all existing previews
+              if !preview_set.app_previews.empty?
+                  preview_set.app_previews.each do |app_preview|
+                      puts("Deleting #{app_preview.id}")
+                      app_preview.delete!
+                  end
+              end
               if preview_set.nil?
                   #puts("Skipping #{lan} >>> #{preview_type}; not create first in app store")
                   #next
                   preview_set = localization.create_app_preview_set(attributes: {previewType: preview_type})
               end
-              # delete all existing previews
-              #if !preview_set.app_previews.empty?
-              #    preview_set.app_previews.each do |app_preview|
-              #        puts("Deleting #{app_preview.id}")
-              #        app_preview.delete!
-              #    end
-              #end
               puts preview_set.upload_preview(path: video_path, wait_for_processing: false)
               puts "video #{video_path} be uploaded on App Store (language >> #{lan})"
           end
