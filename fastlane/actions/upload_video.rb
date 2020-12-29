@@ -12,8 +12,6 @@ module Fastlane
         language = params[:language]
         size = params[:size]
         
-        size_preview_dict = {"2208": ["IPHONE_35", "IPHONE_40", "IPHONE_47", "IPHONE_55"], "2688": ["IPHONE_65"], "2732": ["IPAD_PRO_129", "IPAD_PRO_3GEN_129"]}
-
         UI.message("find video_path:#{video_path} 🌸")
         UI.message("find language:#{language} 🌸")
         UI.message("find size:#{size} 🌸")
@@ -28,24 +26,29 @@ module Fastlane
                 lan = localization.locale
                 if lan == language
                     puts "Only update video app preview on #{language}"
-                    upload_video(localization, lan, size, video_path, size_preview_dict)
+                    upload_video(localization, lan, size, video_path)
                 end
             end
         else
             puts "Only update video app preview on all languages"
             localizations.each do |localization|
                 lan = localization.locale
-                upload_video(localization, lan, size, video_path, size_preview_dict)
+                upload_video(localization, lan, size, video_path)
             end
         end #language
 
       end
 
-      def self.upload_video(localization, lan, size, video_path, size_preview_dict)
+      def self.upload_video(localization, lan, size, video_path)
           preview_sets = localization.get_app_preview_sets
           #Spaceship::ConnectAPI::AppPreviewSet::PreviewType::ALL.each do |preview_type|
-          preview_types = size_preview_dict["2688"]
-          puts size_preview_dict
+          if size == "2208"
+              preview_types = ["IPHONE_35", "IPHONE_40", "IPHONE_47", "IPHONE_55"]
+          elseif size == "2688"
+              preview_types = ["IPHONE_65"]
+          elseif size == "2732"
+              preview_types = ["IPAD_PRO_129", "IPAD_PRO_3GEN_129"]
+          end
           puts size
           puts preview_types
           puts "------------------------------------"
