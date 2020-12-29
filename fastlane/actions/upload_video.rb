@@ -42,15 +42,14 @@ module Fastlane
       def self.upload_video(localization, lan, video_size, video_path)
           preview_sets = localization.get_app_preview_sets
           #Spaceship::ConnectAPI::AppPreviewSet::PreviewType::ALL.each do |preview_type|
-          preview_types = ["Not Found"]
           if video_size.to_s.strip == "2208"
               preview_types = ["IPHONE_35", "IPHONE_40", "IPHONE_47", "IPHONE_55"]
-          end
-          if video_size.to_s.strip == "2688"
+          elsif video_size.to_s.strip == "2688"
               preview_types = ["IPHONE_65"]
-          end
-          if video_size.to_s.strip == "2732"
+          elsif video_size.to_s.strip == "2732"
               preview_types = ["IPAD_PRO_129", "IPAD_PRO_3GEN_129"]
+          else
+              preview_types = ["Not Found"]
           end
           puts video_size
           puts preview_types
