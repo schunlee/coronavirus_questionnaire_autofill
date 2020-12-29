@@ -167,6 +167,15 @@ lane :modify_normal_subscription do |options|
                         cleared_flag: "#{cleared_flag}")
 end
 
+lane :upload_video_app_preview do |options|
+   video_path = options[:video_path]
+   language = options[:language]
+   upload_video(video_path: video_path, language: language)
+   puts "--------------------- Fastfile ✨ ---------------------------------"
+end
+
+
+
 lane :modify_auto_renewable_subscription do |options|
     puts options
     product_id = options[:product_id]
