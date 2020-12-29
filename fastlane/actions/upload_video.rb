@@ -79,8 +79,7 @@ module Fastlane
         [
           FastlaneCore::ConfigItem.new(key: :video_path,
                                        env_name: "FL_UPLOAD_VIDEO_API_TOKEN", # The name of the environment variable
-                                       description: "API Token for UploadVideoAction")
-                                       end),
+                                       description: "API Token for UploadVideoAction"),
           FastlaneCore::ConfigItem.new(key: :language,
                                        env_name: "FL_UPLOAD_VIDEO_DEVELOPMENT",
                                        description: "Create a development certificate instead of a distribution one")
