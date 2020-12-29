@@ -170,8 +170,7 @@ end
 lane :upload_video_app_preview do |options|
    video_path = options[:video_path]
    language = options[:language]
-   video_size = options[:video_size]
-   upload_video(video_path: video_path, language: language, video_size: video_size)
+   upload_video(video_path: video_path, language: language)
    puts "--------------------- Fastfile ✨ ---------------------------------"
 end
 
