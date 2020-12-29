@@ -16,9 +16,9 @@ module Fastlane
         UI.message("find language:#{language} 🌸")
         UI.message("find size:#{size} 🌸")
         
-        SIZE_PREVIEW_DICT = {"2208" => ["IPHONE_35", "IPHONE_40", "IPHONE_47", "IPHONE_55"],
-                             "2688"=> ["IPHONE_65"],
-                             "2732"=> ["IPAD_PRO_129", "IPAD_PRO_3GEN_129"]
+        SIZE_PREVIEW_DICT = {:2208 => ["IPHONE_35", "IPHONE_40", "IPHONE_47", "IPHONE_55"],
+                             :2688 => ["IPHONE_65"],
+                             :2732 => ["IPAD_PRO_129", "IPAD_PRO_3GEN_129"]
                             }
 
         Spaceship::Tunes.login($FASTLANE_USER, $FASTLANE_PASSWORD)
