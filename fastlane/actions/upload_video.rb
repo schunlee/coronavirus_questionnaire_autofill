@@ -12,6 +12,8 @@ module Fastlane
         video_path = params[:video_path]
         language = params[:language]
         size = params[:size]
+        
+        puts self.size_preview_dict
 
         UI.message("find video_path:#{video_path} 🌸")
         UI.message("find language:#{language} 🌸")
