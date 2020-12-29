@@ -35,7 +35,7 @@ module Fastlane
                 upload_video(localization, lan, video_path)
             end
         end #language
-
+        UI.message "👏👏👏👏👏👏👏👏👏👏👏👏👏👏👏👏"
       end
 
       def self.upload_video(localization, lan, video_path)
