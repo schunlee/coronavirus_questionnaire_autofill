@@ -8,10 +8,6 @@ module Fastlane
       def self.run(params)
         # fastlane will take care of reading in the parameter and fetching the environment variable:
         UI.message "💖💗💖💗 BEGIN 💖💗💖💗"
-        SIZE_PREVIEW_DICT = {"2208": ["IPHONE_35", "IPHONE_40", "IPHONE_47", "IPHONE_55"],
-                             "2688": ["IPHONE_65"],
-                             "2732": ["IPAD_PRO_129", "IPAD_PRO_3GEN_129"]}
-        
         video_path = params[:video_path]
         language = params[:language]
         size = params[:size]
@@ -22,6 +18,8 @@ module Fastlane
         
         Spaceship::Tunes.login($FASTLANE_USER, $FASTLANE_PASSWORD)
         app = Spaceship::ConnectAPI::App.find(ENV['APP_IDENTIFIER'])
+        
+        SIZE_PREVIEW_DICT = {:"2208"=>["IPHONE_35", "IPHONE_40", "IPHONE_47", "IPHONE_55"], :"2688"=>["IPHONE_65"], :"2732"=>["IPAD_PRO_129", "IPAD_PRO_3GEN_129"]}
 
         app_version = app.get_edit_app_store_version(platform:Spaceship::ConnectAPI::Platform::IOS)
         localizations = app_version.get_app_store_version_localizations
