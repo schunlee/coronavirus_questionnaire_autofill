@@ -50,7 +50,6 @@ module Fastlane
           else
               preview_types = ["Not Found"]
           end
-          puts video_size
           puts preview_types
           puts "------------------------------------"
           preview_types.each do |preview_type|
