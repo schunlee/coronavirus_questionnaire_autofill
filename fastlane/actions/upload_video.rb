@@ -45,6 +45,8 @@ module Fastlane
           preview_sets = localization.get_app_preview_sets
           #Spaceship::ConnectAPI::AppPreviewSet::PreviewType::ALL.each do |preview_type|
           preview_types = size_preview_dict[size]
+          puts size_preview_dict
+          puts size
           puts preview_types
           puts "------------------------------------"
           preview_types.each do |preview_type|
