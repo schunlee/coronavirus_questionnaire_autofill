@@ -28,6 +28,7 @@ module Fastlane
                 end
             end
         else
+            puts "Only update video app preview on all languages"
             localizations.each do |localization|
                 lan = localization.locale
                 upload_video(localization, lan, video_path)
