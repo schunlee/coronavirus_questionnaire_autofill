@@ -34,7 +34,7 @@ module Fastlane
             localizations.each do |localization|
                 lan = localization.locale
                 upload_video(localization, lan, video_size, video_path)
-            end
+            endgf
         end #language
 
       end
@@ -45,7 +45,7 @@ module Fastlane
           if video_size.to_s.strip == "2208"
               puts video_size
               preview_types = ["IPHONE_35", "IPHONE_40", "IPHONE_47", "IPHONE_55"]
-          elsif size.to_s.strip == "2688"
+          elsif video_size.to_s.strip == "2688"
               puts video_size
               preview_types = ["IPHONE_65"]
           elsif video_size.to_s.strip == "2732"
