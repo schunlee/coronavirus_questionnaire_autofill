@@ -8,6 +8,7 @@ module Fastlane
       def self.run(params)
         # fastlane will take care of reading in the parameter and fetching the environment variable:
         UI.message "💖💗💖💗 BEGIN 💖💗💖💗"
+        UI.message "🍭 \u001b[36;1mUpload video app preview"
         video_path = params[:video_path]
         language = params[:language]
         video_size = params[:video_size]
@@ -114,7 +115,7 @@ module Fastlane
 
       def self.authors
         # So no one will ever forget your contribution to fastlane :) You are awesome btw!
-        ["Your GitHub/Twitter Name"]
+        ["bill.li"]
       end
 
       def self.is_supported?(platform)
