@@ -67,9 +67,11 @@ module Fastlane
                   video_name = video_path.split("/")[-1]
                   puts video_name
                   preview_set.app_previews.each do |app_preview|
-                      puts app_preview.file_name
-                      puts("Deleting #{app_preview.id}")
-                      app_preview.delete!
+                      if app_preview.file_name.include?(video_name)
+                          puts app_preview.file_name
+                          puts("Deleting #{app_preview.id}")
+                          app_preview.delete!
+                      end
                   end
               end
               if preview_set.nil?
