@@ -51,7 +51,7 @@ module Fastlane
           elsif video_path.include?("1200") or video_path.include?("1600")
               preview_types = ["IPAD_PRO_129", "IPAD_PRO_3GEN_129"]
           else
-              preview_types = ["Not Found"]
+              raise Exception.new "\u001b[31mNot find valid size of videos 👿"
           end
           puts preview_types
           puts "------------------------------------"
