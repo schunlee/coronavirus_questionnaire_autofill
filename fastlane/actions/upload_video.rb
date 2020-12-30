@@ -65,6 +65,7 @@ module Fastlane
               # delete all existing previews
               if preview_set and !preview_set.app_previews.empty?
                   preview_set.app_previews.each do |app_preview|
+                      puts app_preview
                       puts("Deleting #{app_preview.id}")
                       app_preview.delete!
                   end
