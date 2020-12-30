@@ -64,6 +64,8 @@ module Fastlane
               end
               # delete all existing previews
               if preview_set and !preview_set.app_previews.empty?
+                  video_name = video_path.split("/")[-1]
+                  puts video_name
                   preview_set.app_previews.each do |app_preview|
                       puts app_preview.file_name
                       puts("Deleting #{app_preview.id}")
