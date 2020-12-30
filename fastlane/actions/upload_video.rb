@@ -13,6 +13,8 @@ module Fastlane
         language = params[:language]
         video_position = params[:video_position]
         
+        video_position = video_position.to_int
+        
         UI.message("find video_path:#{video_path} 🌸")
         UI.message("find language:#{language} 🌸")
         
