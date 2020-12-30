@@ -11,6 +11,7 @@ module Fastlane
         UI.message "🍭 \u001b[36;1mUpload video app preview"
         video_path = params[:video_path]
         language = params[:language]
+        video_position = params[:video_position]
         
         UI.message("find video_path:#{video_path} 🌸")
         UI.message("find language:#{language} 🌸")
@@ -25,20 +26,20 @@ module Fastlane
                 lan = localization.locale
                 if lan == language
                     puts "Only update video app preview on #{language}"
-                    upload_video(localization, lan, video_path)
+                    upload_video(localization, lan, video_path, video_position)
                 end
             end
         else
             puts "Update video app preview on all languages"
             localizations.each do |localization|
                 lan = localization.locale
-                upload_video(localization, lan, video_path)
+                upload_video(localization, lan, video_path, video_position)
             end
         end #language
         UI.message "👏👏👏👏👏👏👏👏👏👏👏👏👏👏👏👏"
       end
 
-      def self.upload_video(localization, lan, video_path)
+      def self.upload_video(localization, lan, video_path, video_position)
           preview_sets = localization.get_app_preview_sets
           #Spaceship::ConnectAPI::AppPreviewSet::PreviewType::ALL.each do |preview_type|
           if video_path.include?("1080")
@@ -69,7 +70,7 @@ module Fastlane
               if preview_set.nil?
                   preview_set = localization.create_app_preview_set(attributes: {previewType: preview_type})
               end
-              puts preview_set.upload_preview(path: video_path, wait_for_processing: false)
+              puts preview_set.upload_preview(path: video_path, wait_for_processing: false, position: video_position)
               puts "video #{video_path} be uploaded on App Store (language >> #{lan})"
           end
       end
@@ -94,6 +95,9 @@ module Fastlane
         # Below a few examples
         [
           FastlaneCore::ConfigItem.new(key: :video_path,
+                                       env_name: "FL_UPLOAD_VIDEO_API_TOKEN", # The name of the environment variable
+                                       description: "API Token for UploadVideoAction"),
+          FastlaneCore::ConfigItem.new(key: :video_position,
                                        env_name: "FL_UPLOAD_VIDEO_API_TOKEN", # The name of the environment variable
                                        description: "API Token for UploadVideoAction"),
           FastlaneCore::ConfigItem.new(key: :language,
