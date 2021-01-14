@@ -1,110 +1,212 @@
-require 'git'
+require 'fileutils'
 require 'terminal-table'
 
-puts "0️⃣ \u001b[36;1msearch Podfile.lock/podfile.lock to delete"
-Dir.glob(["**/Podfile.lock"]).each do|f|
-    pod_lock_pth = File.expand_path(f)
-    puts "the absolute path of Podfile.lock: #{pod_lock_pth} 🌸"
-    puts File.delete(pod_lock_pth)
+source_dir = ENV["BITRISE_SOURCE_DIR"] # /Users/vagrant/git
+project_dir = "#{source_dir}/proj.android-studio"
+
+def find_insert_position(file_content, target_str, pos_adujst)
+    file_content.each_line.with_index do |line, line_num|
+        if line.include?(target_str)
+            return line_num + pos_adujst
+        end
+    end
+    return nil
 end
 
-puts "1️⃣ \u001b[36;1msearch to get Podfile/podfile absolute path"
-podfile_pth = ""
-Dir.glob(["**/Podfile", "**/podfile"]).each do|f|
-    podfile_pth = File.expand_path(f)
+
+puts "0️⃣ \u001b[36;1mto modify app/build.gradle"
+app_gradle_pth = ""
+Dir.glob(["**/app/build.gradle"]).each do|f|
+    app_gradle_pth = File.expand_path(f)
+    puts "the absolute path of app/build.gradle: #{app_gradle_pth} 🌸"
 end
-puts "the absolute path of Podfile: #{podfile_pth} 🌸"
-
-if podfile_pth == ""
-    raise Exception.new "\n\u001b[31mCannot find Podfile👿"
-end
-
-# read original content of podfile
-p_file = File.open(podfile_pth)
-podfile_content = p_file.read
-p_file.close
-
-puts "2️⃣ \u001b[36;1mread Podfile, to get source git url and sdk versions"
-git_urls = []
-base_name_list = []
-versions = []
-
-replacements = {'source' => '', "'" => '', '"' => '', '‘' => '', '’' => ''}
-File.foreach(podfile_pth).with_index do |line, line_num|
-   line = line.lstrip.rstrip
-   if line.start_with?("source") and line.include?(".git") and not line.include?("CocoaPods/Specs")
-       sdk_url = line.gsub(Regexp.union(replacements.keys), replacements).lstrip.rstrip
-       sdk_name = sdk_url.split("/")[-1].split(".git")[0]
-       git_urls.append(sdk_url)
-       base_name_list.append(sdk_name)
-   end
+if app_gradle_pth == ""
+    raise Exception.new "\n\u001b[31mCannot find app/build.gradle 👿"
 end
 
-File.foreach(podfile_pth).with_index do |line, line_num|
-   line = line.lstrip.rstrip
-   if line.start_with?("pod")
-       version = line.to_s[/([\d|\.]+)/,0]
-       if line.include?("SSCUtilitySDK")
-           base_sdk_name = "SSCUtilitySDK"
-       elsif line.include?("SSCUnityLib")
-           base_sdk_name = base_name_list.reject {|n| n == "SSCUtilitySDK"}[0]
-       else
-           next
-       end
-       versions.append({"base_name": base_sdk_name, "version": version})
-   end
+app_gradle_content=File.open(app_gradle_pth).read
+insert_index = find_insert_position(app_gradle_content, "plugins", 1)
+if insert_index
+    app_gradle_lines = app_gradle_content.split("\n")
+    app_gradle_lines.insert(insert_index, "    id 'com.github.triplet.play'")
 end
 
-puts "sdk versions: #{versions} 🌸"
-
-
-puts "3️⃣ \u001b[36;1mgit clone sdk to the local, and modify Podfile source git url"
-git_urls.each do |item|
-    base_name = item.split("/")[-1].split(".git")[0]
-    replace_git_url = "http://***:*****@********/3rd-party/#{base_name}.git"
-    podfile_content = podfile_content.gsub(item, "file:///Users/vagrant/git/#{base_name}")
-    puts "git url: #{item} 🌸"
-    puts Git.clone(replace_git_url, "/Users/vagrant/git/#{base_name}")
+insert_index = find_insert_position(app_gradle_content, "apply plugin", 1)
+if insert_index
+    app_gradle_lines = app_gradle_content.split("\n")
+    app_gradle_lines.insert(insert_index, "    apply plugin: 'com.github.triplet.play'")
 end
 
-File.open(podfile_pth, "w") { |f| f.write podfile_content }
+app_gradle_content = app_gradle_lines.join("\n")
+
+insert_index = find_insert_position(app_gradle_content, "dependencies", -1)
+if insert_index
+    app_gradle_lines = app_gradle_content.split("\n")
+    app_gradle_lines.insert(insert_index, 'play {serviceAccountCredentials = file("google-play-auto-publisher.json")}')
+end
+
+app_gradle_content = app_gradle_lines.join("\n")
 
 table = Terminal::Table.new do |t|
-  t << ["Modified Podfile"]
+  t << ["Modified app/build.gradle"]
   t << :separator
-  t.add_row [podfile_content]
+  t.add_row [app_gradle_content]
 end
 table.style = {:border_x => "*", :border_y => "|", :border_i => "*"}
 puts table
 
-puts "4️⃣ \u001b[36;1mmodify source git url of target version podspec"
-versions.each do |item|
-    puts "sdk_name => #{item[:base_name]} 🌸"
-    if item[:base_name] == "SSCUtilitySDK"
-        sdk_version = item[:version]
-        sdk_name = item[:base_name]
-        podsec_file_path = "/Users/vagrant/git/SSCUtilitySDK/SSCUtilitySDK/#{sdk_version}/SSCUtilitySDK.podspec"
-    else
-        sdk_version = item[:version]
-        sdk_name = item[:base_name]
-        podsec_file_path = "/Users/vagrant/git/#{sdk_name}/SSCUnityLib/#{sdk_version}/SSCUnityLib.podspec"
+File.open(app_gradle_pth, "w") { |f| f.write app_gradle_content }
+
+puts "1️⃣ \u001b[36;1mto modify project root build.gradle"
+proj_gradle_pth = ""
+Dir.glob(["**/build.gradle"]).each do|f|
+    _pth = File.expand_path(f)
+    if _pth != app_gradle_pth
+       proj_gradle_pth = _pth
+       puts "the absolute path of project build.gradle: #{proj_gradle_pth} 🌸"
     end
-    podsec_file = File.open(podsec_file_path)
-    podsec_content = podsec_file.read
-    podsec_content = podsec_content.gsub("git@github.stm.com:3rd-party/#{sdk_name}.git", "file:///Users/vagrant/git/#{sdk_name}")
-    podsec_file.close
-    File.open(podsec_file_path, "w") { |f| f.write podsec_content }
-         
-    table = Terminal::Table.new do |t|
-        t << ["Modified Version Podsec"]
-        t << :separator
-        t.add_row [podsec_content]
+end
+if proj_gradle_pth == ""
+    raise Exception.new "\n\u001b[31mCannot find project build.gradle 👿"
+end
+
+proj_gradle_content=File.open(proj_gradle_pth).read
+insert_index = find_insert_position(proj_gradle_content, "dependencies", 1)
+if insert_index
+    proj_gradle_lines = proj_gradle_content.split("\n")
+    proj_gradle_lines.insert(insert_index, '        classpath "com.github.triplet.gradle:play-publisher:2.4.0"')
+end
+proj_gradle_content = proj_gradle_lines.join("\n")
+insert_index = find_insert_position(proj_gradle_content, "buildscript", 3)
+if insert_index
+    proj_gradle_lines = proj_gradle_content.split("\n")
+    proj_gradle_lines.insert(insert_index, "        maven { url 'https://plugins.gradle.org/m2/' }")
+end
+proj_gradle_content = proj_gradle_lines.join("\n")
+
+table = Terminal::Table.new do |t|
+  t << ["Modified project build.gradle"]
+  t << :separator
+  t.add_row [proj_gradle_content]
+end
+table.style = {:border_x => "*", :border_y => "|", :border_i => "*"}
+puts table
+
+File.open(proj_gradle_pth, "w") { |f| f.write proj_gradle_content }
+
+puts "create google-play-auto-publisher.json"
+key_content = ENV['ANDROID_PUBLISHER_CREDENTIALS']
+File.open("#{project_dir}/app/google-play-auto-publisher.json", "w") { |f| f.write key_content }
+
+
+puts "2️⃣ \u001b[36;1mcreate metadata resources dir"
+
+path_list = [
+    "#{project_dir}/app/src/main/play",
+    "#{project_dir}/app/src/main/play/listings",
+]
+
+["en-US", "zh-CN", "zh-HK", "zh-TW"].each do |lan|
+#["en-US"].each do |lan|
+    path_list.append("#{project_dir}/app/src/main/play/listings/#{lan}")
+    path_list.append("#{project_dir}/app/src/main/play/listings/#{lan}/graphics")
+    path_list.append("#{project_dir}/app/src/main/play/listings/#{lan}/graphics/phone-screenshots")
+    path_list.append("#{project_dir}/app/src/main/play/listings/#{lan}/graphics/tablet-screenshots")
+    path_list.append("#{project_dir}/app/src/main/play/listings/#{lan}/graphics/large-tablet-screenshots")
+    path_list.append("#{project_dir}/app/src/main/play/listings/#{lan}/graphics/icon")
+    path_list.append("#{project_dir}/app/src/main/play/listings/#{lan}/graphics/feature-graphic")
+end
+
+path_list.each do |element|
+  Dir.mkdir(element)
+end
+
+icon_file_name = ENV['ANDROID_PUBLISHER_CN_ICON']
+if icon_file_name
+    puts "3️⃣ 🇨🇳 \u001b[36;1mcopy cn icon pic to target dirs"
+    if File.exist?("#{source_dir}/postproduction/gp/store/icon/#{icon_file_name}")
+        ["zh-CN", "zh-HK", "zh-TW"].each do |lan|
+            FileUtils.cp("#{source_dir}/postproduction/gp/store/icon/#{icon_file_name}", "#{project_dir}/app/src/main/play/listings/#{lan}/graphics/icon/icon.png")
+        end
+    else 
+        raise Exception.new "\n\u001b[31mCannot find #{source_dir}/postproduction/gp/store/icon/#{icon_file_name} 👿"
     end
-    table.style = {:border_x => "*", :border_y => "|", :border_i => "*"}
-    puts table
-    system("cd /Users/vagrant/git/#{sdk_name} && git add . && git commit -m 'modify by bill.li'")
+end
+
+icon_file_name = ENV['ANDROID_PUBLISHER_US_ICON']
+if icon_file_name
+    puts "4️⃣ 🇺🇸 \u001b[36;1mcopy icon us pic to target dirs"
+    puts "#{source_dir}/postproduction/gp/store/icon/#{icon_file_name}"
+    if File.exist?("#{source_dir}/postproduction/gp/store/icon/#{icon_file_name}")
+        ["en-US"].each do |lan|
+            FileUtils.cp("#{source_dir}/postproduction/gp/store/icon/#{icon_file_name}", "#{project_dir}/app/src/main/play/listings/#{lan}/graphics/icon/icon.png")
+        end
+    else 
+        raise Exception.new "\n\u001b[31mCannot find #{source_dir}/postproduction/gp/store/icon/#{icon_file_name} 👿"
+    end
 end
 
 
+feature_file_name = ENV['ANDROID_PUBLISHER_CN_FEATURE']
+if feature_file_name
+    puts "5️⃣ 🇨🇳 \u001b[36;1mcopy cn feature-graphic pic to target dirs"
+    puts "#{source_dir}/postproduction/gp/store/fg/#{feature_file_name}"
+    if File.exist?("#{source_dir}/postproduction/gp/store/fg/#{feature_file_name}")
+        ["zh-CN", "zh-HK", "zh-TW"].each do |lan|
+            FileUtils.cp("#{source_dir}/postproduction/gp/store/fg/#{feature_file_name}", "#{project_dir}/app/src/main/play/listings/#{lan}/graphics/feature-graphic/feature-graphic.png")
+        end
+    else
+        raise Exception.new "\n\u001b[31mCannot find #{source_dir}/postproduction/gp/store/fg/#{feature_file_name} 👿"
+    end
+end
 
-system( "envman add --key PODFILE_PATH --value '#{podfile_pth}' " )
+feature_file_name = ENV['ANDROID_PUBLISHER_US_FEATURE']
+if feature_file_name
+    puts "6️⃣ 🇺🇸 \u001b[36;1mcopy us feature-graphic pic to target dirs"
+    puts "#{source_dir}/postproduction/gp/store/fg/#{feature_file_name}"
+    if File.exist?("#{source_dir}/postproduction/gp/store/fg/#{feature_file_name}")
+        ["en-US"].each do |lan|
+            FileUtils.cp("#{source_dir}/postproduction/gp/store/fg/#{feature_file_name}", "#{project_dir}/app/src/main/play/listings/#{lan}/graphics/feature-graphic/feature-graphic.png")
+        end
+    else
+        raise Exception.new "\n\u001b[31mCannot find #{source_dir}/postproduction/gp/store/fg/#{feature_file_name} 👿"
+    end
+end
+
+
+screen_cn_file_names = ENV['ANDROID_PUBLISHER_CN_SS']
+if screen_cn_file_names
+    puts "7️⃣ 🇨🇳 \u001b[36;1mcopy cn screenshots pic to target dirs"
+    screen_cn_file_names.split(",").each do |screen|
+        puts "#{source_dir}/postproduction/gp/store/screenshots/cn/2048x2732/#{screen}"
+        screen = screen.strip
+        if File.exist?("#{source_dir}/postproduction/gp/store/screenshots/cn/2048x2732/#{screen}")
+            ["zh-CN", "zh-HK", "zh-TW"].each do |lan|
+                FileUtils.cp("#{source_dir}/postproduction/gp/store/screenshots/cn/2048x2732/#{screen}", "#{project_dir}/app/src/main/play/listings/#{lan}/graphics/phone-screenshots")
+                FileUtils.cp("#{source_dir}/postproduction/gp/store/screenshots/cn/2048x2732/#{screen}", "#{project_dir}/app/src/main/play/listings/#{lan}/graphics/tablet-screenshots")
+                FileUtils.cp("#{source_dir}/postproduction/gp/store/screenshots/cn/2048x2732/#{screen}", "#{project_dir}/app/src/main/play/listings/#{lan}/graphics/large-tablet-screenshots")
+            end
+        else
+            raise Exception.new "\n\u001b[31mCannot find #{source_dir}/postproduction/gp/store/screenshots/cn/2048x2732/#{screen} 👿"
+        end
+    end
+end
+
+
+screen_us_file_names = ENV['ANDROID_PUBLISHER_US_SS']
+if screen_us_file_names
+    puts "8️⃣ 🇺🇸 \u001b[36;1mcopy us screenshots pic to target dirs"
+    screen_us_file_names.split(",").each do |screen|
+        puts "#{source_dir}/postproduction/gp/store/screenshots/en/2048x2732/#{screen}"
+        screen = screen.strip
+        if File.exist?("#{source_dir}/postproduction/gp/store/screenshots/en/2048x2732/#{screen}")
+            ["en-US"].each do |lan|
+                FileUtils.cp("#{source_dir}/postproduction/gp/store/screenshots/en/2048x2732/#{screen}", "#{project_dir}/app/src/main/play/listings/#{lan}/graphics/phone-screenshots")
+                FileUtils.cp("#{source_dir}/postproduction/gp/store/screenshots/en/2048x2732/#{screen}", "#{project_dir}/app/src/main/play/listings/#{lan}/graphics/tablet-screenshots")
+                FileUtils.cp("#{source_dir}/postproduction/gp/store/screenshots/en/2048x2732/#{screen}", "#{project_dir}/app/src/main/play/listings/#{lan}/graphics/large-tablet-screenshots")
+            end
+        else
+            raise Exception.new "\n\u001b[31mCannot find #{source_dir}/postproduction/gp/store/screenshots/us/2048x2732/#{screen} 👿"
+        end
+    end
+end
