@@ -92,8 +92,8 @@ path_list = [
     "#{project_dir}/app/src/main/play/listings",
 ]
 
-#["en-US", "zh-CN", "zh-HK", "zh-TW"].each do |lan|
-["en-US"].each do |lan|
+["en-US", "zh-CN", "zh-HK", "zh-TW"].each do |lan|
+#["en-US"].each do |lan|
     path_list.append("#{project_dir}/app/src/main/play/listings/#{lan}")
     path_list.append("#{project_dir}/app/src/main/play/listings/#{lan}/graphics")
     path_list.append("#{project_dir}/app/src/main/play/listings/#{lan}/graphics/phone-screenshots")
@@ -107,11 +107,22 @@ path_list.each do |element|
   Dir.mkdir(element)
 end
 
-icon_file_name = ENV['ANDROID_PUBLISHER_ICON']
+icon_file_name = ENV['ANDROID_PUBLISHER_CN_ICON']
 if icon_file_name
-    puts "3️⃣ \u001b[36;1mcopy icon pic to target dirs"
+    puts "3️⃣  🇨🇳 \u001b[36;1mcopy cn icon pic to target dirs"
     if File.exist?("#{source_dir}/postproduction/gp/store/icon/#{icon_file_name}")
-        #["en-US", "zh-CN", "zh-HK", "zh-TW"].each do |lan|
+        ["zh-CN", "zh-HK", "zh-TW"].each do |lan|
+            FileUtils.cp("#{source_dir}/postproduction/gp/store/icon/#{icon_file_name}", "#{project_dir}/app/src/main/play/listings/#{lan}/graphics/icon/icon.png")
+        end
+    else 
+        raise Exception.new "\n\u001b[31mCannot find #{source_dir}/postproduction/gp/store/icon/#{icon_file_name} 👿"
+    end
+end
+
+icon_file_name = ENV['ANDROID_PUBLISHER_US_ICON']
+if icon_file_name
+    puts "4️⃣ 🇺🇸 \u001b[36;1mcopy icon us pic to target dirs"
+    if File.exist?("#{source_dir}/postproduction/gp/store/icon/#{icon_file_name}")
         ["en-US"].each do |lan|
             FileUtils.cp("#{source_dir}/postproduction/gp/store/icon/#{icon_file_name}", "#{project_dir}/app/src/main/play/listings/#{lan}/graphics/icon/icon.png")
         end
@@ -121,11 +132,22 @@ if icon_file_name
 end
 
 
-feature_file_name = ENV['ANDROID_PUBLISHER_FEATURE']
+feature_file_name = ENV['ANDROID_PUBLISHER_CN_FEATURE']
 if feature_file_name
-    puts "4️⃣ \u001b[36;1mcopy feature-graphic pic to target dirs"
+    puts "5️⃣ 🇨🇳 \u001b[36;1mcopy cn feature-graphic pic to target dirs"
     if File.exist?("#{source_dir}/postproduction/gp/store/fg/#{feature_file_name}")
-        #["en-US", "zh-CN", "zh-HK", "zh-TW"].each do |lan|
+        ["zh-CN", "zh-HK", "zh-TW"].each do |lan|
+            FileUtils.cp("#{source_dir}/postproduction/gp/store/fg/#{feature_file_name}", "#{project_dir}/app/src/main/play/listings/#{lan}/graphics/feature-graphic/feature-graphic.png")
+        end
+    else
+        raise Exception.new "\n\u001b[31mCannot find #{source_dir}/postproduction/gp/store/fg/#{feature_file_name} 👿"
+    end
+end
+
+feature_file_name = ENV['ANDROID_PUBLISHER_US_FEATURE']
+if feature_file_name
+    puts "6️⃣ 🇺🇸 \u001b[36;1mcopy us feature-graphic pic to target dirs"
+    if File.exist?("#{source_dir}/postproduction/gp/store/fg/#{feature_file_name}")
         ["en-US"].each do |lan|
             FileUtils.cp("#{source_dir}/postproduction/gp/store/fg/#{feature_file_name}", "#{project_dir}/app/src/main/play/listings/#{lan}/graphics/feature-graphic/feature-graphic.png")
         end
@@ -135,26 +157,27 @@ if feature_file_name
 end
 
 
-#screen_cn_file_names = ENV['ANDROID_PUBLISHER_CN_SS']
-#if screen_cn_file_names
-#    puts "5️⃣ \u001b[36;1mcopy cn screenshots pic to target dirs"
-#    screen_cn_file_names.split(",").each do |screen|
-#        screen = screen.strip
-#        if File.exist?("#{source_dir}/postproduction/gp/store/screenshots/cn/2048x2732/#{screen}")
-#            ["zh-CN", "zh-HK", "zh-TW"].each do |lan|
-#                FileUtils.cp("#{source_dir}/postproduction/gp/store/screenshots/cn/2048x2732/#{screen}", "#{project_dir}/app/src/main/play/listings/#{lan}/graphics/phone-screenshots")
-#                FileUtils.cp("#{source_dir}/postproduction/gp/store/screenshots/cn/2048x2732/#{screen}", "#{project_dir}/app/src/main/play/listings/#{lan}/graphics/tablet-screenshots")
-#            end
-#        else
-#            raise Exception.new "\n\u001b[31mCannot find #{source_dir}/postproduction/gp/store/screenshots/cn/2048x2732/#{screen} 👿"
-#        end
-#    end
-#end
+screen_cn_file_names = ENV['ANDROID_PUBLISHER_CN_SS']
+if screen_cn_file_names
+    puts "7️⃣ 🇨🇳 \u001b[36;1mcopy cn screenshots pic to target dirs"
+    screen_cn_file_names.split(",").each do |screen|
+        screen = screen.strip
+        if File.exist?("#{source_dir}/postproduction/gp/store/screenshots/cn/2048x2732/#{screen}")
+            ["zh-CN", "zh-HK", "zh-TW"].each do |lan|
+                FileUtils.cp("#{source_dir}/postproduction/gp/store/screenshots/cn/2048x2732/#{screen}", "#{project_dir}/app/src/main/play/listings/#{lan}/graphics/phone-screenshots")
+                FileUtils.cp("#{source_dir}/postproduction/gp/store/screenshots/cn/2048x2732/#{screen}", "#{project_dir}/app/src/main/play/listings/#{lan}/graphics/tablet-screenshots")
+                FileUtils.cp("#{source_dir}/postproduction/gp/store/screenshots/cn/2048x2732/#{screen}", "#{project_dir}/app/src/main/play/listings/#{lan}/graphics/large-tablet-screenshots")
+            end
+        else
+            raise Exception.new "\n\u001b[31mCannot find #{source_dir}/postproduction/gp/store/screenshots/cn/2048x2732/#{screen} 👿"
+        end
+    end
+end
 
 
 screen_us_file_names = ENV['ANDROID_PUBLISHER_US_SS']
 if screen_us_file_names
-    puts "6️⃣ \u001b[36;1mcopy us screenshots pic to target dirs"
+    puts "8️⃣ 🇺🇸 \u001b[36;1mcopy us screenshots pic to target dirs"
     screen_us_file_names.split(",").each do |screen|
         screen = screen.strip
         if File.exist?("#{source_dir}/postproduction/gp/store/screenshots/en/2048x2732/#{screen}")
