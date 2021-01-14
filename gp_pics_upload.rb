@@ -163,8 +163,8 @@ end
 screen_cn_file_names = ENV['ANDROID_PUBLISHER_CN_SS']
 if screen_cn_file_names
     puts "7️⃣ 🇨🇳 \u001b[36;1mcopy cn screenshots pic to target dirs"
-    puts "#{source_dir}/postproduction/gp/store/screenshots/cn/2048x2732/#{screen}"
     screen_cn_file_names.split(",").each do |screen|
+        puts "#{source_dir}/postproduction/gp/store/screenshots/cn/2048x2732/#{screen}"
         screen = screen.strip
         if File.exist?("#{source_dir}/postproduction/gp/store/screenshots/cn/2048x2732/#{screen}")
             ["zh-CN", "zh-HK", "zh-TW"].each do |lan|
@@ -182,8 +182,8 @@ end
 screen_us_file_names = ENV['ANDROID_PUBLISHER_US_SS']
 if screen_us_file_names
     puts "8️⃣ 🇺🇸 \u001b[36;1mcopy us screenshots pic to target dirs"
-    puts "#{source_dir}/postproduction/gp/store/screenshots/en/2048x2732/#{screen}"
     screen_us_file_names.split(",").each do |screen|
+        puts "#{source_dir}/postproduction/gp/store/screenshots/en/2048x2732/#{screen}"
         screen = screen.strip
         if File.exist?("#{source_dir}/postproduction/gp/store/screenshots/en/2048x2732/#{screen}")
             ["en-US"].each do |lan|
