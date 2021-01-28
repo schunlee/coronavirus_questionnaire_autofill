@@ -1,4 +1,4 @@
-let url = "https://us-central1-nexa-1181.cloudfunctions.net/zhipin"; //数据上传Google Storage
+let url = ""; //数据上传Google Storage
 
 function slip(height,duration){
     //设备宽高度根据手机尺寸可调节
@@ -14,20 +14,44 @@ function slip(height,duration){
     sleep(time_random);
 }
 
+function CurentTime(){ 
+    var now = new Date();
+    var year = now.getFullYear();       //年
+    var month = now.getMonth() + 1;     //月
+    var day = now.getDate();            //日
+    var hh = now.getHours();            //时
+    var mm = now.getMinutes();          //分
+    var clock = year + "-";
+    if(month < 10)
+        clock += "0";
+    clock += month + "-";
+    if(day < 10)
+        clock += "0"; 
+    clock += day + " ";
+    if(hh < 10)
+        clock += "0";
+    clock += hh + ":";
+    if (mm < 10) clock += '0'; 
+    clock += mm; 
+    return(clock);
+}
+
 
 
 //获取所有已发布的职位
 var position_tabs = id("scroll_view").findOne().children();
+var report_time = CurentTime();
 position_tabs.forEach(function(child, i){
     child.click();
     sleep(5000);
     console.info(child.text());
-    persions(child.text(), i)
+    persions(child.text(), i, report_time);
 });
 
-function browse_candidate(candidate_name, position){
+//牛人信息全浏览，并抓取关键数据上传Google Storage
+function browse_candidate(candidate_name, position, position_index, person_index, report_time){
     var flag = ""
-
+    candidate_name = id("tv_geek_name").findOne().text(); //刷新牛人姓名，避免错名情况
     var working_year = id("tv_geek_work_year").findOne().text();
     console.info(working_year);
     var status = id("tv_geek_work_status").findOne().text();
@@ -86,7 +110,10 @@ function browse_candidate(candidate_name, position){
             "desire_job": desire_job,
             "schoolS": school,
             "majors": major,
-            "position": position
+            "position": position,
+            "position_index": position_index,
+            "person_index": person_index,
+            "report_time": report_time
             }
     let res = http.postJson(url, JSON.stringify(payload));
     let html_content = res.body.string();  //取页面html源码
@@ -95,13 +122,9 @@ function browse_candidate(candidate_name, position){
 }
 
 
-function persions(position, position_index){
-    var persions_list = []
-    test = [1,2]
-    test.forEach(function(){
-        id("vp_fragment_tabs").findOne().children().forEach(function(child, i){
-            if(i == position_index){
-                var targets = child.find(className("android.widget.LinearLayout"));
+//浏览当前页面所有的牛人
+function operate_candidate(child, position, persions_list, position_index, report_time){
+    var targets = child.find(className("android.widget.LinearLayout"));
                 targets.forEach(function (currentValue, j){
                     var persons = currentValue.find(id("tv_geek_name"));
                     persons.forEach(function(item, k){
@@ -110,18 +133,31 @@ function persions(position, position_index){
                         // console.info(persions_list);
                         if(persions_list.indexOf(abstract) == -1){
                             item.parent().click();
-                            browse_candidate(item.text(), position);
+                            browse_candidate(item.text(), position, position_index, persions_list.length, report_time);
                             sleep(3000);
                             persions_list.push(abstract);
                         }
                         
                     });
                 });
+}
+
+
+// 下拉滚动更新牛人
+function persions(position, position_index, report_time){
+    var persions_list = []
+    while(true){
+        id("vp_fragment_tabs").findOne().children().forEach(function(child, i){
+            if(i == position_index){
+                operate_candidate(child, position, persions_list, position_index, report_time);
             }
         });
         console.info("----------" + "牛人下拉" + "----------");
         // slip(2010,40);
         slip(1000,40);
-    });
-    console.error(persions_list);
+        if(persions_list.length > 20){
+            console.error(persions_list);
+            break
+        }
+    };
 }
