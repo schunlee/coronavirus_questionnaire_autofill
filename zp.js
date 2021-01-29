@@ -1,4 +1,4 @@
-let url = ""; //数据上传Google Storage
+let url = "https://us-central1-nexa-1181.cloudfunctions.net/zhipin"; //数据上传Google Storage
 
 function slip(height,duration){
     //设备宽高度根据手机尺寸可调节
@@ -37,21 +37,38 @@ function CurentTime(){
 }
 
 
+auto.waitFor();
+var appName = "BOSS直聘";
+launchApp(appName);
+sleep(3000);
+toast("Launch app - " + appName);
 
-//获取所有已发布的职位
-var position_tabs = id("scroll_view").findOne().children();
-var report_time = CurentTime();
-position_tabs.forEach(function(child, i){
-    child.click();
-    sleep(5000);
-    console.info(child.text());
-    persions(child.text(), i, report_time);
-});
+// 进入牛人页面
+var candidate = id("cl_tab_1").findOnce();
+if (candidate && candidate.clickable()) {
+    toast("Swicth to `牛人` tag");
+    candidate.click();
+    sleep(4000);
+
+
+    //获取所有已发布的职位
+    var position_tabs = id("scroll_view").findOne().children();
+    var report_time = CurentTime();
+    position_tabs.forEach(function(child, i){
+        child.click();
+        sleep(5000);
+        console.info(child.text());
+        persions(child.text(), i, report_time);
+    });
+}else{
+    toast("Cannot find `牛人` tag");
+
+    }
 
 //牛人信息全浏览，并抓取关键数据上传Google Storage
 function browse_candidate(candidate_name, position, position_index, person_index, report_time){
     var flag = ""
-    candidate_name = id("tv_geek_name").findOne().text(); //刷新牛人姓名，避免错名情况
+    // candidate_name = id("tv_geek_name").findOne().text(); //刷新牛人姓名，避免错名情况
     var working_year = id("tv_geek_work_year").findOne().text();
     console.info(working_year);
     var status = id("tv_geek_work_status").findOne().text();
@@ -74,7 +91,7 @@ function browse_candidate(candidate_name, position, position_index, person_index
     
         if(id("tv_section_title").exists()){
             id("tv_section_title").find().forEach(function(currentValue, index) {
-                if(currentValue.text() == "教育经历" || currentValue.text() == "看过Ta的人还联系了"  || currentValue.text() == "TA的回答"){
+                if(currentValue.text() == "教育经历" || currentValue.text() == "看过Ta的人还联系了"  || currentValue.text() == "TA的回答" || id("tv_edu_desc").exists()){
                     flag = currentValue.text();
                     console.info(flag);
                     console.info("===========" + "最后一次下拉" + "===========");
@@ -118,7 +135,6 @@ function browse_candidate(candidate_name, position, position_index, person_index
     let res = http.postJson(url, JSON.stringify(payload));
     let html_content = res.body.string();  //取页面html源码
     let json_content = JSON.parse(html_content);
-    toast(json_content);
 }
 
 
@@ -133,8 +149,8 @@ function operate_candidate(child, position, persions_list, position_index, repor
                         // console.info(persions_list);
                         if(persions_list.indexOf(abstract) == -1){
                             item.parent().click();
+                            sleep(8000);
                             browse_candidate(item.text(), position, position_index, persions_list.length, report_time);
-                            sleep(3000);
                             persions_list.push(abstract);
                         }
                         
