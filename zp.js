@@ -43,6 +43,21 @@ launchApp(appName);
 sleep(3000);
 toast("Launch app - " + appName);
 
+var home = id("cl_tab_4").findOnce();
+if(home && home.clickable()){
+    home.click();
+    sleep(4000);
+    id("rl_boss_base_info").findOne().click();
+    sleep(2000);
+    var boss_name = id("tv_name").findOne().text()
+    var company = id("tv_brand").findOne().text()
+    console.info(boss_name);
+    console.info(company);
+    id("iv_back").findOne().click();
+}
+
+sleep(3000);
+
 // 进入牛人页面
 var candidate = id("cl_tab_1").findOnce();
 if (candidate && candidate.clickable()) {
@@ -68,7 +83,7 @@ if (candidate && candidate.clickable()) {
 //牛人信息全浏览，并抓取关键数据上传Google Storage
 function browse_candidate(candidate_name, position, position_index, person_index, report_time){
     var flag = ""
-    // candidate_name = id("tv_geek_name").findOne().text(); //刷新牛人姓名，避免错名情况
+    var internal_candidate_name = id("tv_geek_name").findOne().text(); //刷新牛人姓名，避免错名情况
     var working_year = id("tv_geek_work_year").findOne().text();
     console.info(working_year);
     var status = id("tv_geek_work_status").findOne().text();
@@ -119,18 +134,21 @@ function browse_candidate(candidate_name, position, position_index, person_index
     id("iv_back").findOne().click();
     payload = {
             "candidate_name": candidate_name,
+            "internal_candidate_name": internal_candidate_name,
             "status": status,
             "working_year": working_year,
             "degree": degree,
             "salary": salary,
             "industry": industry,
             "desire_job": desire_job,
-            "schoolS": school,
+            "schools": school,
             "majors": major,
             "position": position,
             "position_index": position_index,
             "person_index": person_index,
-            "report_time": report_time
+            "report_time": report_time,
+            "boss_name": boss_name,
+            "boss_company": boss_company
             }
     let res = http.postJson(url, JSON.stringify(payload));
     let html_content = res.body.string();  //取页面html源码
@@ -171,7 +189,7 @@ function persions(position, position_index, report_time){
         console.info("----------" + "牛人下拉" + "----------");
         // slip(2010,40);
         slip(1000,40);
-        if(persions_list.length > 20){
+        if(persions_list.length > 30){
             console.error(persions_list);
             break
         }
