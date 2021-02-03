@@ -1,11 +1,11 @@
 let url = "https://us-central1-nexa-1181.cloudfunctions.net/zhipin"; //数据上传Google Storage
 
-function slip(height,duration){
+function slip(height,height2, duration){
     //设备宽高度根据手机尺寸可调节
     var w1 = 2;
     var w2 = 2;
     var height_1=height;
-    var height_2=0;
+    var height_2=height2;
     //随机等待时间random（最小值，最大值）根据需要更改数值（单位秒）
     var time_random=random(1,5)*1000;
     swipe(device.width/w1,height_1,device.width/w2,height_2,duration);
@@ -43,17 +43,24 @@ launchApp(appName);
 sleep(3000);
 toast("Launch app - " + appName);
 
-var home = id("cl_tab_4").findOnce();
+var home = id("cl_tab_4").findOne();
+var boss_name = "";
+var boss_company = "";
+
+console.info(home);
+console.info(home.clickable())
 if(home && home.clickable()){
-    home.click();
-    sleep(4000);
-    id("rl_boss_base_info").findOne().click();
-    sleep(2000);
-    var boss_name = id("tv_name").findOne().text()
-    var company = id("tv_brand").findOne().text()
-    console.info(boss_name);
-    console.info(company);
-    id("iv_back").findOne().click();
+    console.info("home")
+home.click();
+sleep(4000);
+id("rl_boss_base_info").findOne().click();
+sleep(3000);
+boss_name = id("tv_name").findOne().text()
+console.info("boss name")
+boss_company = id("tv_brand").findOne().text()
+console.info(boss_name);
+console.info(boss_company);
+id("iv_back").findOne().click();
 }
 
 sleep(3000);
@@ -67,13 +74,34 @@ if (candidate && candidate.clickable()) {
 
 
     //获取所有已发布的职位
-    var position_tabs = id("scroll_view").findOne().children();
+    // var position_tabs = className("android.widget.FrameLayout").depth(18).find();
+    if(className("android.widget.FrameLayout").depth(18).exists()){
+        var position_tabs = className("android.widget.FrameLayout").depth(18).find();
+    }else{
+        var position_tabs = id("scroll_view").findOne().children();
+    }
+
+    console.info("position_tabs =>" + position_tabs.length);
     var report_time = CurentTime();
-    position_tabs.forEach(function(child, i){
-        child.click();
+    position_tabs.forEach(function(child, j){
+        console.info("11111111");
+        if(child.clickable()){
+            child.click();
+        }else{
+            child.children()[0].click();
+        }
+        
+        // console.info(child.children()[0].click());
+        console.info("22222222");
         sleep(5000);
-        console.info(child.text());
-        persions(child.text(), i, report_time);
+        toast("j" + j)
+        if(child.text()){
+            var position_name = child.text();
+        }else{
+            var position_name = child.children()[0].text();
+        }
+        toast(position_name);
+        persons(position_name, j, report_time, boss_company, boss_name);
     });
 }else{
     toast("Cannot find `牛人` tag");
@@ -81,7 +109,7 @@ if (candidate && candidate.clickable()) {
     }
 
 //牛人信息全浏览，并抓取关键数据上传Google Storage
-function browse_candidate(candidate_name, position, position_index, person_index, report_time){
+function browse_candidate(candidate_name, position, position_index, person_index, report_time, boss_company, boss_name){
     var flag = ""
     var internal_candidate_name = id("tv_geek_name").findOne().text(); //刷新牛人姓名，避免错名情况
     var working_year = id("tv_geek_work_year").findOne().text();
@@ -90,27 +118,31 @@ function browse_candidate(candidate_name, position, position_index, person_index
     console.info(status);
     var degree = id("tv_geek_degree").findOne().text();
     console.info(degree);
+
+    slip(1000, 920, 30); //下滑
     var salary = id("tv_salary").findOne().text();
     console.info(salary);
     var industry = id("tv_industry").findOne().text();
-    console.info(industry);
+    console.info("tv_industry" + industry);
     var desire_job = id("tv_job_and_city").findOne().text();
-    console.info(desire_job);
+    console.info("tv_job_and_city" + desire_job);
+    
     var school = "";
     var major = "";
 
 
     while(flag == ""){
         console.info("**********" + "信息下拉" + "**********");
-        slip(2000, 10); //下滑
+        slip(1000, 0, 30); //下滑
     
         if(id("tv_section_title").exists()){
             id("tv_section_title").find().forEach(function(currentValue, index) {
-                if(currentValue.text() == "教育经历" || currentValue.text() == "看过Ta的人还联系了"  || currentValue.text() == "TA的回答" || id("tv_edu_desc").exists()){
+                if(currentValue.text() == "教育经历" || currentValue.text() == "看过Ta的人还联系了"  || 
+                currentValue.text() == "TA的回答" || currentValue.text() == "牛人分析器" || id("tv_edu_desc").exists()){
                     flag = currentValue.text();
                     console.info(flag);
                     console.info("===========" + "最后一次下拉" + "===========");
-                    slip(2000, 10); //下滑
+                    slip(1000, 0, 30); //下滑
                     var schools = id("tv_school").find();
                     var schools_list = []
                     schools.forEach(function(item, i){
@@ -157,38 +189,57 @@ function browse_candidate(candidate_name, position, position_index, person_index
 
 
 //浏览当前页面所有的牛人
-function operate_candidate(child, position, persions_list, position_index, report_time){
+function operate_candidate(child, position, persions_list, position_index, report_time, boss_company, boss_name){
+    console.info("persions_list:" + persions_list.length);
     var targets = child.find(className("android.widget.LinearLayout"));
-                targets.forEach(function (currentValue, j){
-                    var persons = currentValue.find(id("tv_geek_name"));
-                    persons.forEach(function(item, k){
-                        var abstract = item.text() + " " + position;
-                        // console.info(abstract);
-                        // console.info(persions_list);
-                        if(persions_list.indexOf(abstract) == -1){
-                            item.parent().click();
-                            sleep(8000);
-                            browse_candidate(item.text(), position, position_index, persions_list.length, report_time);
-                            persions_list.push(abstract);
-                        }
-                        
-                    });
-                });
+    toast(targets.length);
+    targets.forEach(function (currentValue, j){
+        console.info("##########");
+        var persons = currentValue.find(id("tv_geek_name"));
+        console.info("*************")
+        console.info("persons" + persons)
+        // console.info(persons)
+        persons.forEach(function(item, k){
+            var abstract = item.text() + " " + position;
+            console.info(abstract);
+            // console.info(abstract);
+            // console.info(persions_list);
+            if(persions_list.indexOf(abstract) == -1){
+                console.info("8888888");
+                if(item.parent().clickable()){
+                    item.parent().click();
+                }else{
+                    console.info("else => " + item.parent().parent().clickable());
+                    item.parent().parent().click();
+                }
+                sleep(8000);
+                browse_candidate(item.text(), position, position_index, persions_list.length, report_time, boss_company, boss_name);
+                persions_list.push(abstract);
+            }
+            
+        });
+    });
 }
 
 
 // 下拉滚动更新牛人
-function persions(position, position_index, report_time){
+function persons(position, position_index, report_time, boss_company, boss_name){
     var persions_list = []
     while(true){
+        toast("hello" + id("vp_fragment_tabs").findOne().children().length);
+
         id("vp_fragment_tabs").findOne().children().forEach(function(child, i){
+            console.info("child" + child.text());
+            console.info("i" + i);
+            console.info("position_index" + position_index);
             if(i == position_index){
-                operate_candidate(child, position, persions_list, position_index, report_time);
+                console.info("sssssssss");
+                operate_candidate(child, position, persions_list, position_index, report_time, boss_company, boss_name);
             }
         });
         console.info("----------" + "牛人下拉" + "----------");
         // slip(2010,40);
-        slip(1000,40);
+        slip(1000,0,40);
         if(persions_list.length > 30){
             console.error(persions_list);
             break
