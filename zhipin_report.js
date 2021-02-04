@@ -77,12 +77,22 @@ function crawl_report_data(position_name, position_index){
         console.info(today_viewed);
         var today_contacted = className("android.view.View").depth(14).indexInParent(5).findOne().text();
         console.info(today_contacted);
+        if(!className("android.view.View").depth(14).indexInParent(14).exists() && ui_style === "2"){
+            console.info("sdsdsdeeeeeeeeeeeeeedd33");
+            id("webview_layout").depth(7).indexInParent(0).findOne().find(className("android.view.View").depth(15).indexInParent(0))[5].click();
+        }
+
         var today_get_resume = className("android.view.View").depth(14).indexInParent(11).findOne().text();
         console.info(today_get_resume);
         var today_wechat = className("android.view.View").depth(14).indexInParent(14).findOne().text();
         console.info(today_wechat);
-        var today_interview = className("android.view.View").depth(14).indexInParent(17).findOne().text();
-        console.info(today_interview);
+        if(className("android.view.View").depth(14).indexInParent(17).exists()){
+            var today_interview = className("android.view.View").depth(14).indexInParent(17).findOne().text();
+            console.info(today_interview);
+        }else{
+            var today_interview = "";
+        }
+        
         var today_communicate = className("android.view.View").depth(14).indexInParent(8).findOne().text();
         console.info(today_communicate);
 
@@ -113,11 +123,15 @@ function crawl_report_data(position_name, position_index){
         var compare_yester_wechat_arrow_prefix = detect_arrow_color(compare_yester_wechat_arrow);
         compare_yester_wechat = compare_yester_wechat_arrow_prefix + compare_yester_wechat;
         
+        if(className("android.view.View").depth(14).indexInParent(18).exists()){
+            var compare_yester_interview = className("android.view.View").depth(14).indexInParent(18).findOne().findOne(className("android.view.View").depth(15).indexInParent(2)).text();
+            var compare_yester_interview_arrow = className("android.view.View").depth(14).indexInParent(18).findOne().findOne(className("android.view.View").depth(15).indexInParent(1));
+            var compare_yester_interview_arrow_prefix = detect_arrow_color(compare_yester_interview_arrow);
+            compare_yester_interview = compare_yester_interview_arrow_prefix + compare_yester_interview;
+        }else{
+            compare_yester_interview = "";
+        }
         
-        var compare_yester_interview = className("android.view.View").depth(14).indexInParent(18).findOne().findOne(className("android.view.View").depth(15).indexInParent(2)).text();
-        var compare_yester_interview_arrow = className("android.view.View").depth(14).indexInParent(18).findOne().findOne(className("android.view.View").depth(15).indexInParent(1));
-        var compare_yester_interview_arrow_prefix = detect_arrow_color(compare_yester_interview_arrow);
-        compare_yester_interview = compare_yester_interview_arrow_prefix + compare_yester_interview;
         
         
         var compare_yester_communicate = className("android.view.View").depth(14).indexInParent(9).findOne().findOne(className("android.view.View").depth(15).indexInParent(2)).text();
@@ -130,6 +144,11 @@ function crawl_report_data(position_name, position_index){
         console.info(today_viewed);
         var today_contacted = className("android.view.View").depth(6).indexInParent(5).findOne().text();
         console.info(today_contacted);
+        if(!className("android.view.View").depth(6).indexInParent(14).exists() && ui_style === "1"){
+            console.info("s0s0s00s0s");
+            className("android.view.View").text("展开更多数据").findOne().click();
+        }
+
         var today_get_resume = className("android.view.View").depth(6).indexInParent(11).findOne().text();
         console.info(today_get_resume);
         var today_wechat = className("android.view.View").depth(6).indexInParent(14).findOne().text();
@@ -212,13 +231,20 @@ function crawl_report_data(position_name, position_index){
 
 auto.waitFor();
 var appName = "BOSS直聘";
+requestScreenCapture(false);
 launchApp(appName);
 sleep(3000);
 toast("Launch app - " + appName);
 var report_time = CurentTime();
-requestScreenCapture(false);
 
-var home = id("cl_tab_4").findOnce();
+sleep(3000);
+
+var home = id("cl_tab_4").findOne();
+var boss_name = "";
+var boss_company = "";
+
+console.info(home);
+console.info(home.clickable())
 if(home && home.clickable()){
     home.click();
     sleep(4000);
@@ -240,12 +266,27 @@ if(home && home.clickable()){
     }
     
     
-    sleep(4000);
+    sleep(5000);
     console.info("111111111");
+    sleep(10000);
+    var ui_style = "";
+
     if(className("android.view.View").text("展开更多数据").exists()){
         console.info("22222222");
-        className("android.view.View").text("展开更多数据").findOne().click()
+        ui_style = "1";
+        className("android.view.View").text("展开更多数据").findOne().click();
     }
+    
+
+    if(id("webview_layout").depth(7).indexInParent(0).exists() && id("webview_layout").depth(7).indexInParent(0).findOne().find(className("android.view.View").depth(15).indexInParent(0))[5].text() === "展开更多数据"){
+        console.info("sdsdsddd33");
+        ui_style = "2";
+        id("webview_layout").depth(7).indexInParent(0).findOne().find(className("android.view.View").depth(15).indexInParent(0))[5].click();
+    }
+
+    
+
+    
 
     var positions = className("android.widget.ListView").scrollable(true).findOne().children();
     positions.forEach(function(item, i){
@@ -256,7 +297,7 @@ if(home && home.clickable()){
         console.info(position_name);
         item.click();
         sleep(5000);
-        crawl_report_data(position_name, position_index);
+        crawl_report_data(position_name, position_index, ui_style);
     });
     
     
@@ -264,4 +305,4 @@ if(home && home.clickable()){
     
 }
 toast("Finished!!!");
-close_app(appName);
+// close_app(appName);
