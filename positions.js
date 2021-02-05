@@ -1,4 +1,4 @@
-let url = "https://us-central1-nexa-1181.cloudfunctions.net/zhipin_positions"
+let url = "https://us-central1-nexa-1181.cloudfunctions.net/zhipin_positions";
 
 function slip(height,height2, duration){
     //设备宽高度根据手机尺寸可调节
@@ -52,9 +52,17 @@ function close_app(packageName) {
     if (is_sure.enabled()) {
         console.info("hhhhhhhh")
         sleep(3000);
-        textMatches("强行停止").findOne().click();
-        textMatches("强行停止").findOne().click();
-
+        if(id("right_button").exists()){
+            id("right_button").click();
+        }
+        
+        sleep(3000)
+        if(className("android.widget.Button").depth(5).indexInParent(1).exists()){
+            className("android.widget.Button").depth(5).indexInParent(1).findOne().click();
+        }
+        if(className("android.widget.Button").depth(1).indexInParent(3).exists()){
+            className("android.widget.Button").depth(1).indexInParent(3).findOne().click();
+        }
         log(app.getAppName(name) + "应用已被关闭");
         sleep(1000);
         back();
@@ -108,13 +116,19 @@ if(home && home.clickable()){
     list_jobs(job_count)
 
 }
-// close_app(appName);
+var sleep_time = 3000 + random(1,4)*1000;
+sleep(sleep_time);
+toast("sleep " + sleep_time);
+toast("Finished!!!");
+console.info("Finished!!!");
+close_app(appName);
 
 
 
 function list_jobs(job_count){
     var jobs_list = [];
     var job_status = "";
+    var crawl_index = 0;
     while(true){
         sleep(3000)
         if(className("android.view.ViewGroup").depth(4).exists()){
@@ -145,7 +159,7 @@ function list_jobs(job_count){
                 var job_name = job_name_obj.text();
                 toast(job_name);
                 console.info(jobs_list);
-                jobs_list.push(job_name);
+                
                 if(id("tv_job_state").exists()){
                     job_status = id("tv_job_state").findOne().text();
                 }
@@ -158,11 +172,16 @@ function list_jobs(job_count){
                 payload.boss_name = boss_name;
                 payload.company = company;
                 payload.job_name = job_name;
-                payload.job_order = job_order;
+                payload.job_status = job_status;
 
-                let res = http.postJson(url, JSON.stringify(payload));
-                let html_content = res.body.string();  //取页面html源码
-                let json_content = JSON.parse(html_content);
+                if(jobs_list.indexOf(job_name + payload.contacted_count + payload.viewed_count + payload.like_count + payload.shared_count + payload.job_type) === -1){
+                    payload.crawl_index = crawl_index;
+                    let res = http.postJson(url, JSON.stringify(payload));
+                    let html_content = res.body.string();  //取页面html源码
+                    let json_content = JSON.parse(html_content);
+                    crawl_index = crawl_index + 1;
+                    jobs_list.push(job_name + payload.contacted_count + payload.viewed_count + payload.like_count + payload.shared_count + payload.job_type);
+                } 
             }catch (e){
                 
             }
@@ -176,7 +195,7 @@ function list_jobs(job_count){
         );
         sleep(3000);
         console.info("-----------下拉----------");
-        slip(1000, 930, 30);
+        slip(1000, 950, 30);
         sleep(5000);
         // if(jobs_list.length == job_count){
         //     break
@@ -196,6 +215,7 @@ function browse_job(){
         console.info("---------------------------------")
         var internal_job_name = id("tv_job_name").findOne().text();
         var job_desp = id("tv_description").findOne().text();
+        var job_type = id("tv_banner_title").findOne().text();
 
         
         if(className("android.widget.LinearLayout").depth(3).find()[1]){
@@ -226,7 +246,8 @@ function browse_job(){
                 "contacted_count": contacted_count,
                 "viewed_count": viewed_count,
                 "like_count": like_count,
-                "shared_count": shared_count
+                "shared_count": shared_count,
+                "job_type": job_type
                 }
         
     }
