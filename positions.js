@@ -195,7 +195,7 @@ function list_jobs(job_count){
         );
         sleep(3000);
         console.info("-----------下拉----------");
-        slip(1000, 950, 30);
+        slip(1000, 970, 30);
         sleep(5000);
         // if(jobs_list.length == job_count){
         //     break
