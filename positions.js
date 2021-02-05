@@ -74,76 +74,6 @@ function close_app(packageName) {
     }
 }
 
-
-
-
-
-
-auto.waitFor();
-var appName = "BOSS直聘";
-launchApp(appName);
-var sleep_time = 4000 + random(1,3)*1000;
-sleep(sleep_time);
-toast("sleep " + sleep_time);
-toast("Launch app - " + appName);
-
-var report_time = CurentTime();
-
-var home = id("cl_tab_4").findOnce();
-
-toast("home_button clickable" + home.clickable());
-console.info("home_button clickable" + home.clickable());
-if(home && home.clickable()){
-    home.click();
-    var sleep_time = 4000 + random(1,3)*1000;
-    sleep(sleep_time);
-    toast("sleep " + sleep_time);
-    id("rl_boss_base_info").findOne().click();
-    var sleep_time = 2000 + random(1,3)*1000;
-    sleep(sleep_time);
-    toast("sleep " + sleep_time);
-    var boss_name = id("tv_name").findOne().text();
-    var company = id("tv_brand").findOne().text();
-    console.info("boss_name " + boss_name);
-    toast("boss_name " + boss_name);
-    console.info("boss_company " + company);
-    toast("boss_company " + company);
-    id("iv_back").findOne().click();
-    var sleep_time = 4000 + random(1,3)*1000;
-    sleep(sleep_time);
-    toast("sleep " + sleep_time);
-
-    if(className("android.widget.ScrollView").depth(1).indexInParent(5).exists()){
-        console.info("UI => 2")
-        var job_count = className("android.widget.ScrollView").depth(1).indexInParent(5).findOne().find(className("android.widget.TextView"))[0].text();
-        console.info("开放职位数: " + job_count);
-        toast("开放职位数: " + job_count);
-        className("android.widget.ScrollView").depth(1).indexInParent(5).findOne().find(className("android.widget.TextView"))[0].parent().click();
-    }else{
-        console.info("UI => 1")
-        var job_count = className("android.widget.LinearLayout").depth(13).indexInParent(0).find()[1].findOne(id("tvPositionCount")).text();
-        console.info("开放职位数: " + job_count);
-        toast("开放职位数: " + job_count);
-        className("android.widget.LinearLayout").depth(13).indexInParent(0).find()[1].children()[0].click();
-    }
-    var sleep_time = 5000 + random(1,3)*1000;
-    sleep(sleep_time);
-    toast("sleep " + sleep_time);
-    console.info("*****************")
-    list_jobs(job_count)
-}else{
-    toast("`我的` tag没找到耶，请关闭app重来盘");
-    console.info("`我的` tag没找到耶，请关闭app重来盘");
-}
-var sleep_time = 3000 + random(1,4)*1000;
-sleep(sleep_time);
-toast("sleep " + sleep_time);
-toast("Finished!!!");
-console.info("Finished!!!");
-close_app(appName);
-
-
-
 function list_jobs(job_count){
     console.info("开始爬取职位信息...");
     toast("开始爬取职位信息...");
@@ -237,9 +167,6 @@ function list_jobs(job_count){
     }
 }
 
-
-
-
 function browse_job(){
     var flag = "";
     while(flag == ""){
@@ -292,7 +219,70 @@ function browse_job(){
                 "shared_count": shared_count,
                 "job_type": job_type
                 }
-        
     }
-    
 }
+
+
+
+auto.waitFor();
+var appName = "BOSS直聘";
+launchApp(appName);
+var sleep_time = 4000 + random(1,3)*1000;
+sleep(sleep_time);
+toast("sleep " + sleep_time);
+toast("Launch app - " + appName);
+
+var report_time = CurentTime();
+
+var home = id("cl_tab_4").findOnce();
+
+toast("home_button clickable" + home.clickable());
+console.info("home_button clickable" + home.clickable());
+if(home && home.clickable()){
+    home.click();
+    var sleep_time = 4000 + random(1,3)*1000;
+    sleep(sleep_time);
+    toast("sleep " + sleep_time);
+    id("rl_boss_base_info").findOne().click();
+    var sleep_time = 2000 + random(1,3)*1000;
+    sleep(sleep_time);
+    toast("sleep " + sleep_time);
+    var boss_name = id("tv_name").findOne().text();
+    var company = id("tv_brand").findOne().text();
+    console.info("boss_name " + boss_name);
+    toast("boss_name " + boss_name);
+    console.info("boss_company " + company);
+    toast("boss_company " + company);
+    id("iv_back").findOne().click();
+    var sleep_time = 4000 + random(1,3)*1000;
+    sleep(sleep_time);
+    toast("sleep " + sleep_time);
+
+    if(className("android.widget.ScrollView").depth(1).indexInParent(5).exists()){
+        console.info("UI => 2")
+        var job_count = className("android.widget.ScrollView").depth(1).indexInParent(5).findOne().find(className("android.widget.TextView"))[0].text();
+        console.info("开放职位数: " + job_count);
+        toast("开放职位数: " + job_count);
+        className("android.widget.ScrollView").depth(1).indexInParent(5).findOne().find(className("android.widget.TextView"))[0].parent().click();
+    }else{
+        console.info("UI => 1")
+        var job_count = className("android.widget.LinearLayout").depth(13).indexInParent(0).find()[1].findOne(id("tvPositionCount")).text();
+        console.info("开放职位数: " + job_count);
+        toast("开放职位数: " + job_count);
+        className("android.widget.LinearLayout").depth(13).indexInParent(0).find()[1].children()[0].click();
+    }
+    var sleep_time = 5000 + random(1,3)*1000;
+    sleep(sleep_time);
+    toast("sleep " + sleep_time);
+    console.info("*****************")
+    list_jobs(job_count)
+}else{
+    toast("`我的` tag没找到耶，请关闭app重来盘");
+    console.info("`我的` tag没找到耶，请关闭app重来盘");
+}
+var sleep_time = 3000 + random(1,4)*1000;
+sleep(sleep_time);
+toast("sleep " + sleep_time);
+toast("Finished!!!");
+console.info("Finished!!!");
+close_app(appName);
